@@ -1,0 +1,8 @@
+
+
+#### match schema
+- it should be possible to create a match with already 
+    existent time stamps but only if the match has not been confirmed,
+- if confirmed match already exists, return error
+- if there are several matches unconfirmed the first one to be confirmed
+    should delete the rest

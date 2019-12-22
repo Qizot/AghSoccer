@@ -21,6 +21,7 @@
     "@types/mongoose": "^5.5.34",
     "bcrypt": "^3.0.7",
     "express": "^4.17.1",
+    "moment": "^2.24.0",
     "mongoose": "^5.8.2"
   },
   "devDependencies": {

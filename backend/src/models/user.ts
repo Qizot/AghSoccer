@@ -44,15 +44,15 @@ const schema = new Schema({
         type: String,
         required: true,
         minlength: 4,
-        maxLength: 20
+        maxlength: 20
 
     },
     credentials: {
         password: {
             type: String,
             required: String,
-            minLength: 6,
-            maxLength: 32
+            minlength: 6,
+            maxlength: 32
         },
         tokenInfo: {
             token: {
@@ -63,7 +63,7 @@ const schema = new Schema({
             }
         }
     },
-    matchesPlayed: [String]
+    matchesPlayed: [Schema.Types.ObjectId]
 }, { timestamps: true });
 
 export const UserSchema = mongoose.model<UserModelType>("user", schema, "users");
@@ -100,7 +100,11 @@ export class UserModel {
         return (this._userModel) as PlainUser;
     }
 
-    static createUser(email: string, nickname: string, password: string): Promise<mongoose.Document> {
+    static createUser({email, nickname, password}: {
+        email: string;
+        nickname: string;
+        password: string;
+    }): Promise<mongoose.Document> {
         return new Promise((resolve, reject) => {
             let repo = new UserRepository();
 

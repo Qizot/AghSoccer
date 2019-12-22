@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { resolveCname } from "dns";
+import { MatchRepository } from "./match";
 
 export interface IRead<T> {
     retrieve: () => Promise<any>;
@@ -11,6 +12,7 @@ export interface IRead<T> {
 export interface IWrite<T> {
     create: (item: T) => Promise<mongoose.Document>;
     update: (_id: mongoose.Types.ObjectId, item: T) => Promise<T>;
+    findByIdAndUpdate: (_id: string, doc: any) => Promise<mongoose.Document>;
     delete: (_id: string) => Promise<void>;
 }
 
@@ -49,6 +51,19 @@ export class RepositoryBase<T extends mongoose.Document> implements IRead<T> , I
                 }
                 resolve(item);
             });
+        });
+    }
+
+    findByIdAndUpdate(_id: string, doc: any): Promise<mongoose.Document> {
+        return new Promise((resolve, reject) => {
+            this._model.findOneAndUpdate({_id: _id}, doc, (err, item) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                resolve(item);
+            })
+
         });
     }
 
