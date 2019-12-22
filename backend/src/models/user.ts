@@ -10,12 +10,12 @@ interface UserCredentials {
     }
 }
 
-interface PlainUser {
+export interface PlainUser {
     _id: string;
     email: string;
     nickname: string;
     matchesPlayed: string[];
-
+    roles: string[];
 }
 
 export interface UserModelType extends mongoose.Document {
@@ -24,6 +24,7 @@ export interface UserModelType extends mongoose.Document {
     credentials: UserCredentials;
     createdAt?: Date;
     matchesPlayed?: string[];
+    roles: string[];
 }
 
 var validateEmail = function(email) {
@@ -63,7 +64,16 @@ const schema = new Schema({
             }
         }
     },
-    matchesPlayed: [Schema.Types.ObjectId]
+    matchesPlayed: [Schema.Types.ObjectId],
+    roles: {
+        type: [
+            {
+                type: String,
+                enum: ["user", "admin"]
+            }
+        ],
+        default: ["user"]
+    }
 }, { timestamps: true });
 
 export const UserSchema = mongoose.model<UserModelType>("user", schema, "users");
@@ -100,6 +110,15 @@ export class UserModel {
         return (this._userModel) as PlainUser;
     }
 
+    get roles(): string[] {
+        return this._userModel.roles;
+    }
+
+    setTokenInfo(info: {token: string, refreshToken: string}) {
+        this._userModel.credentials.tokenInfo = info;
+        return this._userModel.save();
+    }
+
     static createUser({email, nickname, password}: {
         email: string;
         nickname: string;
@@ -124,13 +143,31 @@ export class UserModel {
         });
     }
 
-    static findUser({id, nickname}: {id?: string; nickname?: string}): Promise<mongoose.Document> {
+    static findUser({id, email, nickname}: {id?: string; email?: string; nickname?: string}): Promise<mongoose.Document> {
         return new Promise((resolve, reject) => {
             let repo = new UserRepository();
-            repo.findOne({_id: id, nickname: nickname}).exec()
+            repo.findOne({_id: id, email, nickname}).exec()
                 .then(doc => resolve(doc))
                 .catch(err => reject(err))
         });
+    }
+
+    static findOne(cond: Object, fields: Object): Promise<mongoose.Document> {
+        let repo = new UserRepository();
+        return new Promise((resolve, reject) => {
+            repo.find(cond, fields, null, (err, item) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                resolve(item.find(el => !!el));
+            })
+        });
+    }
+
+    static deleteUser(id: string): Promise<void> {
+        let repo = new UserRepository();
+        return repo.delete(id);
     }
 }
 
