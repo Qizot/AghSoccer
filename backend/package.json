@@ -7,9 +7,9 @@
     "clean": "rimraf dist/*",
     "lint": "tslint -c tslint.json -p tsconfig.json --fix",
     "tsc": "tsc",
-    "build": "npm-run-all clean lint tsc",
+    "build": "npm-run-all clean tsc",
     "dev:start": "npm-run-all build start",
-    "dev": "nodemon --watch src -e ts,ejs --exec npm run dev:start",
+    "watch": "nodemon",
     "start": "node .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,7 +17,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/bcrypt": "^3.0.0",
     "@types/mongoose": "^5.5.34",
+    "bcrypt": "^3.0.7",
     "express": "^4.17.1",
     "mongoose": "^5.8.2"
   },

@@ -1,5 +1,7 @@
 import express from "express";
+import mongoose from "mongoose";
 import path from "path";
+import { UserModel } from "./models/user";
 const app = express();
 const port = 8080; // default port to listen
 
@@ -18,3 +20,20 @@ app.listen( port, () => {
     // tslint:disable-next-line:no-console
     console.log( `server started at http://localhost:${ port }` );
 } );
+
+const uri = "mongodb://localhost/agh_soccer";
+mongoose.connect(uri, { 
+    useNewUrlParser: true,
+    useUnifiedTopology: true 
+}, (err) => {
+  if (err) {
+    console.log(err.message);
+    console.log(err);
+  } else {
+    console.log("Connected to MongoDb");
+  }
+});
+
+UserModel.createUser("dupa", "dupa", "dupa")
+.then((user) => console.log("created user: ", user))
+.catch(err => console.log(err));

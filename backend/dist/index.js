@@ -4,7 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const mongoose_1 = __importDefault(require("mongoose"));
 const path_1 = __importDefault(require("path"));
+const user_1 = require("./models/user");
 const app = express_1.default();
 const port = 8080; // default port to listen
 // Configure Express to use EJS
@@ -20,4 +22,20 @@ app.listen(port, () => {
     // tslint:disable-next-line:no-console
     console.log(`server started at http://localhost:${port}`);
 });
+const uri = "mongodb://localhost/agh_soccer";
+mongoose_1.default.connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}, (err) => {
+    if (err) {
+        console.log(err.message);
+        console.log(err);
+    }
+    else {
+        console.log("Connected to MongoDb");
+    }
+});
+user_1.UserModel.createUser("dupa", "dupa", "dupa")
+    .then((user) => console.log("created user: ", user))
+    .catch(err => console.log(err));
 //# sourceMappingURL=index.js.map
