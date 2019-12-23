@@ -7,7 +7,7 @@ export interface ServiceMessage {
 }
 
 export class ServiceMessageError extends Error {
-    
+
     private data: any;
     private statusCode: number;
 

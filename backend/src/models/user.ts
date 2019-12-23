@@ -1,13 +1,13 @@
+import bcrypt from "bcrypt";
 import mongoose, { Schema } from "mongoose";
 import { RepositoryBase } from "./model_base";
-import bcrypt from "bcrypt";
 
 interface UserCredentials {
     password: string;
     tokenInfo?: {
         token: string;
         refreshToken: string;
-    }
+    };
 }
 
 export interface PlainUser {
@@ -27,9 +27,9 @@ export interface UserModelType extends mongoose.Document {
     roles: string[];
 }
 
-var validateEmail = function(email) {
-    var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    return re.test(email)
+const validateEmail = function(email) {
+    const re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    return re.test(email);
 };
 
 const schema = new Schema({
@@ -38,51 +38,45 @@ const schema = new Schema({
         required: true,
         validate: [validateEmail, "email must match standard"],
         index: {
-            unique: true
-        }
+            unique: true,
+        },
     },
     nickname: {
         type: String,
         required: true,
         minlength: 4,
-        maxlength: 20
+        maxlength: 20,
 
     },
     credentials: {
         password: {
             type: String,
-            required: String
+            required: String,
         },
         tokenInfo: {
             token: {
-                type: String
+                type: String,
             },
             refreshToken: {
-                type: String
-            }
-        }
+                type: String,
+            },
+        },
     },
     matchesPlayed: [Schema.Types.ObjectId],
     roles: {
         type: [
             {
                 type: String,
-                enum: ["user", "admin"]
-            }
+                enum: ["user", "admin"],
+            },
         ],
-        default: ["user"]
-    }
+        default: ["user"],
+    },
 }, { timestamps: true });
 
 export const UserSchema = mongoose.model<UserModelType>("user", schema, "users");
 
 export class UserModel {
-    
-    private _userModel: UserModelType;
-
-    constructor(userModel: UserModelType) {
-        this._userModel = userModel;
-    }
 
     get id(): string {
         return this._userModel.id;
@@ -91,7 +85,7 @@ export class UserModel {
     get email(): string {
         return this._userModel.email;
     }
-    
+
     get nickname(): string {
         return this._userModel.nickname;
     }
@@ -113,65 +107,71 @@ export class UserModel {
         return this._userModel.roles;
     }
 
-    setTokenInfo(info: {token: string, refreshToken: string}) {
-        this._userModel.credentials.tokenInfo = info;
-        return this._userModel.save();
-    }
-
-    static createUser({email, nickname, password}: {
+    public static createUser({email, nickname, password}: {
         email: string;
         nickname: string;
         password: string;
     }): Promise<mongoose.Document> {
         return new Promise((resolve, reject) => {
-            let repo = new UserRepository();
+            const repo = new UserRepository();
 
             const passwordHash = bcrypt.hashSync(password, 10);
 
-            let user: Partial<UserModelType> = {
+            const user: Partial<UserModelType> = {
                 email,
                 nickname,
                 credentials: {
-                    password: passwordHash
-                } 
+                    password: passwordHash,
+                },
             };
 
             repo.create(user)
-                .then(user => resolve(user))
-                .catch(err => reject(err));
+                .then((user) => resolve(user))
+                .catch((err) => reject(err));
         });
     }
 
-    static findUser({id, email, nickname}: {id?: string; email?: string; nickname?: string}): Promise<mongoose.Document> {
-        let params = {};
+    public static findUser({id, email, nickname}: {id?: string; email?: string; nickname?: string}): Promise<mongoose.Document> {
+        const params = {};
 
-        if (id) params["_id"] = id;
-        if (email) params["email"] = email;
-        if (nickname) params["nickname"] = nickname;
+        if (id) { params["_id"] = id; }
+        if (email) { params["email"] = email; }
+        if (nickname) { params["nickname"] = nickname; }
         return new Promise((resolve, reject) => {
-            let repo = new UserRepository();
+            const repo = new UserRepository();
             repo.findOne({...params}).exec()
-                .then(doc => resolve(doc))
-                .catch(err => reject(err))
+                .then((doc) => resolve(doc))
+                .catch((err) => reject(err));
         });
     }
 
-    static findOne(cond: Object, fields: Object): Promise<mongoose.Document> {
-        let repo = new UserRepository();
+    public static findOne(cond: Object, fields: Object): Promise<mongoose.Document> {
+        const repo = new UserRepository();
         return new Promise((resolve, reject) => {
             repo.find(cond, fields, (err, item) => {
                 if (err) {
                     reject(err);
                     return;
                 }
-                resolve(item.find(el => !!el));
-            })
+                resolve(item.find((el) => !!el));
+            });
         });
     }
 
-    static deleteUser(id: string): Promise<void> {
-        let repo = new UserRepository();
+    public static deleteUser(id: string): Promise<void> {
+        const repo = new UserRepository();
         return repo.delete(id);
+    }
+
+    private _userModel: UserModelType;
+
+    constructor(userModel: UserModelType) {
+        this._userModel = userModel;
+    }
+
+    public setTokenInfo(info: {token: string, refreshToken: string}) {
+        this._userModel.credentials.tokenInfo = info;
+        return this._userModel.save();
     }
 }
 

@@ -1,11 +1,10 @@
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import HttpStatus from "http-status-codes";
-import { ServiceMessage, ServiceMessageError } from "./service_message";
-import { extractUserIdFromToken, TokenType} from "./helpers";
-import { PlainUser, UserModel, UserModelType } from "../models/user";
+import jwt from "jsonwebtoken";
 import { config } from "../config/config";
-
+import { PlainUser, UserModel, UserModelType } from "../models/user";
+import { extractUserIdFromToken, TokenType} from "./helpers";
+import { ServiceMessage, ServiceMessageError } from "./service_message";
 
 interface RegisterUser {
     email: string;
@@ -13,7 +12,7 @@ interface RegisterUser {
     password: string;
 }
 
-interface LoginUser{
+interface LoginUser {
     email: string;
     password: string;
 }
@@ -35,21 +34,21 @@ const createUserToken = async (userId: string) => {
     try {
         const u = await UserModel.findUser({id: userId}) as UserModelType;
         const user = new UserModel(u);
-        
+
         const token = jwt.sign({id: user.id}, config.jwtSecret, {
-            expiresIn: "24h"
+            expiresIn: "24h",
         });
 
         const refreshToken = jwt.sign({id: user.id}, config.refreshJwtSecret, {
-            expiresIn: "30d"
+            expiresIn: "30d",
         });
 
-        const savedUser = await user.setTokenInfo({token, refreshToken})
+        const savedUser = await user.setTokenInfo({token, refreshToken});
         return savedUser.credentials.tokenInfo;
     } catch (err) {
-        throw new ServiceMessageError(HttpStatus.INTERNAL_SERVER_ERROR,"error while creating token", err);
+        throw new ServiceMessageError(HttpStatus.INTERNAL_SERVER_ERROR, "error while creating token", err);
     }
-}
+};
 
 const refreshUserToken = async (refreshToken: string) => {
     let userId: string;
@@ -60,31 +59,31 @@ const refreshUserToken = async (refreshToken: string) => {
             throw new ServiceMessageError(HttpStatus.UNAUTHORIZED, "refresh token is too old");
         }
     } catch (err) {
-        if (err instanceof ServiceMessageError) throw err;
+        if (err instanceof ServiceMessageError) { throw err; }
         throw new ServiceMessageError(HttpStatus.UNAUTHORIZED, "invalid refresh token", err);
     }
 
     try {
         return createUserToken(userId);
-    } catch(err) {
+    } catch (err) {
         throw new ServiceMessageError(HttpStatus.INTERNAL_SERVER_ERROR, "could not create token", err);
     }
-}
+};
  // =============================================
  //                 SERVICE FUNCTIONS
  // =============================================
 
 const registerUser = async (user: RegisterUser) => {
     try {
-        await UserModel.createUser({...user})
-        return {success: true, message: "user has been registered"}
+        await UserModel.createUser({...user});
+        return {success: true, message: "user has been registered"};
     } catch (err) {
         if (err.code == 11000) {
-            throw new ServiceMessageError(HttpStatus.BAD_REQUEST, `${Object.keys(err.keyValue).shift()} is not unique`)
+            throw new ServiceMessageError(HttpStatus.BAD_REQUEST, `${Object.keys(err.keyValue).shift()} is not unique`);
         }
-        throw new ServiceMessageError(HttpStatus.FORBIDDEN, "failed to create user", err)
+        throw new ServiceMessageError(HttpStatus.FORBIDDEN, "failed to create user", err);
     }
-}
+};
 
 const loginUser = async (userData: LoginUser) => {
     try {
@@ -96,15 +95,15 @@ const loginUser = async (userData: LoginUser) => {
             throw new ServiceMessageError(HttpStatus.BAD_REQUEST, "passwords don't match");
         }
 
-        return createUserToken(user._id)
+        return createUserToken(user._id);
     } catch (err) {
         throw err;
     }
-}
+};
 
 const refreshToken = async (token: string) => {
     return refreshUserToken(token);
-}
+};
 
 const getMe = async (userId: string) => {
     try {
@@ -115,11 +114,12 @@ const getMe = async (userId: string) => {
 
         return new UserModel(u).plainUser;
     } catch (err) {
-        if (err instanceof ServiceMessageError)
+        if (err instanceof ServiceMessageError) {
             throw err;
+        }
         throw new ServiceMessageError(HttpStatus.UNAUTHORIZED, "invalid user token", err);
     }
-}
+};
 
 const deleteUser = async (userId: string) => {
     try {
@@ -128,14 +128,14 @@ const deleteUser = async (userId: string) => {
     } catch (err) {
         throw new ServiceMessageError(HttpStatus.INTERNAL_SERVER_ERROR, "ecountered error while deleting user", err);
     }
-}
+};
 
 const service: AuthService =  {
     loginUser,
     registerUser,
     refreshToken,
     getMe,
-    deleteUser
+    deleteUser,
 };
 
 export default service;

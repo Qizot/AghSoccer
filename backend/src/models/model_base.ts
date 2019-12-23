@@ -1,12 +1,12 @@
-import mongoose from "mongoose";
 import { resolveCname } from "dns";
+import mongoose from "mongoose";
 import { MatchRepository } from "./match";
 
 export interface IRead<T> {
     retrieve: () => Promise<any>;
     findById: (id: string) => Promise<mongoose.Document>;
-    findOne(cond ? : Object, callback ? : (err: any, res: T) => void): mongoose.DocumentQuery<mongoose.Document, mongoose.Document, {}> ;
-    find(cond: Object, fields: Object, callback ? : (err: any, res: T[]) => void): mongoose.DocumentQuery<mongoose.Document[], mongoose.Document, {}> ;
+    findOne(cond ?: Object, callback ?: (err: any, res: T) => void): mongoose.DocumentQuery<mongoose.Document, mongoose.Document, {}> ;
+    find(cond: Object, fields: Object, callback ?: (err: any, res: T[]) => void): mongoose.DocumentQuery<mongoose.Document[], mongoose.Document, {}> ;
 }
 
 export interface IWrite<T> {
@@ -24,11 +24,11 @@ export class RepositoryBase<T extends mongoose.Document> implements IRead<T> , I
         this._model = schemaModel;
     }
 
-    create(item: Partial<T>): Promise<mongoose.Document> {
+    public create(item: Partial<T>): Promise<mongoose.Document> {
         return this._model.create(item);
     }
 
-    retrieve(): Promise<mongoose.Document[]> {
+    public retrieve(): Promise<mongoose.Document[]> {
         return new Promise((resolve, reject) => {
             this._model.find({}, (err, items) => {
                 if (err) {
@@ -37,10 +37,10 @@ export class RepositoryBase<T extends mongoose.Document> implements IRead<T> , I
                 }
                 resolve(items);
             });
-        })
+        });
     }
 
-    update(_id: mongoose.Types.ObjectId, item: T): Promise<T> {
+    public update(_id: mongoose.Types.ObjectId, item: T): Promise<T> {
         return new Promise((resolve, reject) => {
                 this._model.update({ _id }, item, (err, item) => {
                     if (err) {
@@ -52,7 +52,7 @@ export class RepositoryBase<T extends mongoose.Document> implements IRead<T> , I
             });
     }
 
-    findByIdAndUpdate(_id: string, doc: any): Promise<mongoose.Document> {
+    public findByIdAndUpdate(_id: string, doc: any): Promise<mongoose.Document> {
         return new Promise((resolve, reject) => {
             this._model.findOneAndUpdate({_id: this.toObjectId(_id)}, doc, (err, item) => {
                 if (err) {
@@ -60,15 +60,15 @@ export class RepositoryBase<T extends mongoose.Document> implements IRead<T> , I
                     return;
                 }
                 resolve(item);
-            })
+            });
 
         });
     }
 
-    delete(_id: string): Promise<void> {
+    public delete(_id: string): Promise<void> {
         return new Promise((resolve, reject) => {
             this._model.remove({
-                _id: this.toObjectId(_id)
+                _id: this.toObjectId(_id),
             }, (err) => {
                 if (err) {
                     reject(err);
@@ -79,7 +79,7 @@ export class RepositoryBase<T extends mongoose.Document> implements IRead<T> , I
         });
     }
 
-    findById(_id: string): Promise<mongoose.Document> {
+    public findById(_id: string): Promise<mongoose.Document> {
         return new Promise((resolve, reject) => {
             this._model.findById(_id, (err, item) => {
                 if (err) {
@@ -88,14 +88,14 @@ export class RepositoryBase<T extends mongoose.Document> implements IRead<T> , I
                 }
                 resolve(item);
             });
-        })
+        });
     }
 
-    findOne(cond?: Object, callback?: (err: any, res: T) => void): mongoose.DocumentQuery<mongoose.Document, mongoose.Document, {}> {
+    public findOne(cond?: Object, callback?: (err: any, res: T) => void): mongoose.DocumentQuery<mongoose.Document, mongoose.Document, {}> {
         return this._model.findOne(this.castId(cond), callback);
     }
 
-    find(cond?: Object, fields?: Object, callback?: (err: any, res: T[]) => void): mongoose.DocumentQuery<mongoose.Document[], mongoose.Document, {}> {
+    public find(cond?: Object, fields?: Object, callback?: (err: any, res: T[]) => void): mongoose.DocumentQuery<mongoose.Document[], mongoose.Document, {}> {
         return this._model.find(this.castId(cond), fields, callback);
     }
 
@@ -104,7 +104,7 @@ export class RepositoryBase<T extends mongoose.Document> implements IRead<T> , I
     }
 
     private castId(obj?: Object) {
-        if (!obj || !obj["_id"] || obj["_id"] instanceof Object) return obj;
+        if (!obj || !obj["_id"] || obj["_id"] instanceof Object) { return obj; }
         obj["_id"] = this.toObjectId(obj["_id"]);
         return obj;
     }

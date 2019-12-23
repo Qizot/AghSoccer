@@ -1,15 +1,14 @@
 import express from "express";
 import mongoose from "mongoose";
 import logger from "morgan";
-import indexRouter from './routes/index';
+import indexRouter from "./routes/index";
 
 const app = express();
 const port = 8080; // default port to listen
 const mongoUri = "mongodb://localhost/agh_soccer";
 
-app.use(logger('dev'));
+app.use(logger("dev"));
 app.use(express.json());
-
 
 app.listen( port, () => {
     // tslint:disable-next-line:no-console
@@ -18,10 +17,9 @@ app.listen( port, () => {
 
 app.use("/api", indexRouter);
 
-
-mongoose.connect(mongoUri, { 
+mongoose.connect(mongoUri, {
     useNewUrlParser: true,
-    useUnifiedTopology: true 
+    useUnifiedTopology: true,
 }, (err) => {
   if (err) {
     console.log(err);

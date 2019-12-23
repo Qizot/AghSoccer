@@ -1,6 +1,5 @@
+import { CreateMatchType, MatchModel, MatchModelType, MatchRepository, PlainMatch } from "../models/match";
 import { ServiceMessage, ServiceMessageError } from "./service_message";
-import { CreateMatchType, PlainMatch, MatchModel, MatchModelType, MatchRepository } from "../models/match";
-
 
 interface EditMatch {
     name: string;
@@ -32,7 +31,6 @@ interface MatchService {
     getMatches: (filter: MatchFilter) => Promise<PlainMatch[]>;
 }
 
-
 const getOwnersMatch = async (owner: MatchOwner, matchId: string) => {
     const match = await MatchModel.findMatch(matchId) as MatchModelType;
     if (!match) {
@@ -43,37 +41,37 @@ const getOwnersMatch = async (owner: MatchOwner, matchId: string) => {
         throw new ServiceMessageError(403, "given user is not match's owner");
     }
     return match;
-}
+};
 
 const createMatch = async (owner: MatchOwner, match: CreateMatchType) => {
     try {
         const createdMatch = await MatchModel.createMatch({...match, ownerId: owner.id}) as MatchModelType;
-        return {success: true, message: "match has been created", data: new MatchModel(createdMatch).plainMatch}; 
-    } catch(err) {
-        if (err instanceof ServiceMessageError) throw err;
-        if (err instanceof Error) throw new ServiceMessageError(400, err.message);
+        return {success: true, message: "match has been created", data: new MatchModel(createdMatch).plainMatch};
+    } catch (err) {
+        if (err instanceof ServiceMessageError) { throw err; }
+        if (err instanceof Error) { throw new ServiceMessageError(400, err.message); }
         throw new ServiceMessageError(500, "could not create match, not enough information to determine why", err);
     }
-}
+};
 
 const editMatch = async (owner: MatchOwner, matchId: string,  editMatch: Partial<EditMatch>) => {
     try {
         const match = await getOwnersMatch(owner, matchId);
 
-        if (editMatch.name) match.name = editMatch.name;
-        if (editMatch.description) match.description = editMatch.description;
-        if (editMatch.startTime) match.startTime = editMatch.startTime;
-        if (editMatch.endTime) match.endTime = editMatch.endTime;
-        if (editMatch.password) match.password = editMatch.password;
+        if (editMatch.name) { match.name = editMatch.name; }
+        if (editMatch.description) { match.description = editMatch.description; }
+        if (editMatch.startTime) { match.startTime = editMatch.startTime; }
+        if (editMatch.endTime) { match.endTime = editMatch.endTime; }
+        if (editMatch.password) { match.password = editMatch.password; }
 
-        await match.save()
-        return {success: true, message: "match has been updated"}
+        await match.save();
+        return {success: true, message: "match has been updated"};
     } catch (err) {
-        if (err instanceof ServiceMessageError) throw err;
-        if (err instanceof Error) throw new ServiceMessageError(400, err.message);
+        if (err instanceof ServiceMessageError) { throw err; }
+        if (err instanceof Error) { throw new ServiceMessageError(400, err.message); }
         throw new ServiceMessageError(500, "unknown error while edditing match", err);
     }
-}
+};
 
 const deleteMatch = async (owner: MatchOwner, matchId: string) => {
     try {
@@ -82,28 +80,28 @@ const deleteMatch = async (owner: MatchOwner, matchId: string) => {
         await match.remove();
         return {success: true, message: "match has been deleted"};
     } catch (err) {
-        if (err instanceof ServiceMessageError) throw err;
- 
+        if (err instanceof ServiceMessageError) { throw err; }
+
         throw new ServiceMessageError(500, "unknown error while edditing match", err);
     }
-}
+};
 
 const confirmMatch = async (dsnetToken: string) => {
     throw new ServiceMessageError(501, "confirming matches has not been implemented yet");
     return {success: false, message: "it won't even get here so why even bother"};
-}
+};
 
 const kickUserOut = async (owner: MatchOwner, matchId: string,  userId: string) => {
     try {
         const match = await getOwnersMatch(owner, matchId);
         await new MatchModel(match).derollUser(userId);
-        return {success: true, message: "user has been kicked out"}
+        return {success: true, message: "user has been kicked out"};
     } catch (err) {
-        if (err instanceof ServiceMessageError) throw err;
+        if (err instanceof ServiceMessageError) { throw err; }
 
         throw new ServiceMessageError(500, "unknown error while kicking player out", err);
     }
-}
+};
 
 const enrollUser = async (userId: string, matchId: string, password?: string) => {
     try {
@@ -119,11 +117,11 @@ const enrollUser = async (userId: string, matchId: string, password?: string) =>
         await new MatchModel(match).enrollUser(userId);
         return {success: true, message: "user has been enrolled"};
     } catch (err) {
-        if (err instanceof ServiceMessageError) throw err;
+        if (err instanceof ServiceMessageError) { throw err; }
         console.log("enrolling: ", err);
         throw new ServiceMessageError(500, "unknown error while enrolling player", err);
     }
-}
+};
 
 const derollUser = async (userId: string, matchId: string) => {
     try {
@@ -135,11 +133,11 @@ const derollUser = async (userId: string, matchId: string) => {
         await new MatchModel(match).derollUser(userId);
         return {success: true, message: "user has been derolled"};
     } catch (err) {
-        if (err instanceof ServiceMessageError) throw err;
+        if (err instanceof ServiceMessageError) { throw err; }
 
         throw new ServiceMessageError(500, "unknown error while derolling player", err);
     }
-}
+};
 
 const getMatch = async (matchId: string) => {
     try {
@@ -149,40 +147,39 @@ const getMatch = async (matchId: string) => {
         }
         return new MatchModel(match).plainMatch;
     } catch (err) {
-        if (err instanceof ServiceMessageError) throw err;
+        if (err instanceof ServiceMessageError) { throw err; }
 
         throw new ServiceMessageError(500, "unknown error while getting match", err);
     }
-}
+};
 
 const getMatches = async (filter: MatchFilter) => {
     try {
-        let repo = new MatchRepository();
+        const repo = new MatchRepository();
 
         const publicOnly = filter.showPrivate ? undefined : {
-            password: {$exists: false} 
+            password: {$exists: false},
         };
-
 
         const matches = await repo.find({
             startTime: {
-                $gte: filter.timeFrom
+                $gte: filter.timeFrom,
             } ,
             endTime: {
                 $lte: filter.timeTo,
             },
-            publicOnly
+            publicOnly,
         });
         console.log(matches);
         console.log(filter.timeFrom.toISOString(), filter.timeTo.toISOString());
 
-        return matches.map(m => new MatchModel(m as MatchModelType).plainMatch);
+        return matches.map((m) => new MatchModel(m as MatchModelType).plainMatch);
     } catch (err) {
-        if (err instanceof ServiceMessageError) throw err;
+        if (err instanceof ServiceMessageError) { throw err; }
 
         throw new ServiceMessageError(500, "unknown error while getting matches", err);
     }
-}
+};
 
 const service: MatchService = {
     createMatch,
@@ -193,10 +190,7 @@ const service: MatchService = {
     enrollUser,
     derollUser,
     getMatch,
-    getMatches
-}
+    getMatches,
+};
 
 export default service;
-
-
-

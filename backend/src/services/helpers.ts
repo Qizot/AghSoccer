@@ -1,10 +1,9 @@
 import jwt from "jsonwebtoken";
 import { config } from "../config/config";
 
-
 export enum TokenType {
     Simple,
-    Refresh
+    Refresh,
 }
 
 export const extractUserIdFromToken = (token: string, type: TokenType) => {
@@ -14,4 +13,4 @@ export const extractUserIdFromToken = (token: string, type: TokenType) => {
     }
     const {id} = jwt.verify(token, config.refreshJwtSecret) as {id: string};
     return id;
-}
+};
