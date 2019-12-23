@@ -5,7 +5,6 @@ import { ServiceMessage, ServiceMessageError } from "./service_message";
 import { extractUserIdFromToken, TokenType} from "./helpers";
 import { PlainUser, UserModel, UserModelType } from "../models/user";
 import { config } from "../config/config";
-import { extractRefreshToken } from "../controllers/helpers";
 
 
 interface RegisterUser {

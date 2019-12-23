@@ -6,3 +6,6 @@
 - if confirmed match already exists, return error
 - if there are several matches unconfirmed the first one to be confirmed
     should delete the rest
+
+### match
+- it should not be possible to delete archived match

@@ -9,6 +9,20 @@ const validateDates = (dates: {start: Date, end: Date}) => {
         moment(end).isAfter(moment(start));
 }
 
+export interface PlainMatch {
+    _id: string;
+    name: string;
+    description?: string;
+    confirmed: boolean;
+    ownerId: string;
+    players: string[];
+    createdAt: Date;
+    startTime: Date;
+    endTime: Date;
+    isPrivate: boolean;
+}
+
+// could not extend mongoose.Document and PlainMatch due to _id conflict so here we are copying
 export interface MatchModelType extends mongoose.Document {
     _id: string;
     name: string;
@@ -45,10 +59,14 @@ const schema = new Schema({
         type: Schema.Types.ObjectId,
         required: true
     },
-    players: [{
-        type: Schema.Types.ObjectId,
-        unique: true
-    }],
+    players: {
+        type: [
+            {
+                type: Schema.Types.ObjectId,
+            }
+        ],
+        default: []
+    },
     startTime: {
         type: Date,
         required: true
@@ -73,7 +91,7 @@ schema.pre("validate", function<MatchModelType>(next) {
 
 export const MatchSchema = mongoose.model<MatchModelType>("match", schema, "matches");
 
-interface CreateMatchType {
+export interface CreateMatchType {
     name: string;
     description?: string;
     password?: string;
@@ -126,11 +144,62 @@ export class MatchModel {
         return this._matchModel.endTime;
     }
 
+    get plainMatch(): PlainMatch {
+        const {
+            _id,
+            name,
+            description,
+            confirmed,
+            ownerId,
+            players,
+            createdAt,
+            startTime,
+            endTime
+        } = this._matchModel;
+
+        return {
+            _id,
+            name,
+            description,
+            confirmed,
+            ownerId,
+            players,
+            createdAt,
+            startTime,
+            endTime,
+            isPrivate: !!this._matchModel.password
+        };
+    }
+    
     confirm() {
         this._matchModel.confirmed = true;
         return this._matchModel.save();
     }
 
+    enrollUser(userId: string): Promise<mongoose.Document> {
+        return new Promise((resolve, reject) => {
+            this._matchModel.update({ $addToSet: {players: userId}}).exec((err, item) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                resolve(item);
+            })
+        });
+    }
+
+    derollUser(userId: string): Promise<mongoose.Document> {
+        return new Promise((resolve, reject) => {
+            this._matchModel.update({$pull: {players: userId}}).exec((err, item) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                resolve(item);
+            })
+        });
+    }
+    
     static createMatch(params: CreateMatchType): Promise<mongoose.Document> {
         return new Promise((resolve, reject) => {
             let repo = new MatchRepository();
@@ -152,16 +221,6 @@ export class MatchModel {
                 .then(doc => resolve(doc))
                 .catch(err => reject(err));
         });
-    }
-
-    static enrollUser(matchId: string, userId: string): Promise<mongoose.Document> {
-        let repo = new MatchRepository();
-        return repo.findByIdAndUpdate(matchId, {$push: {players: userId}});
-    }
-
-    static derollUser(matchId: string, userId: string): Promise<mongoose.Document> {
-        let repo = new MatchRepository();
-        return repo.findByIdAndUpdate(matchId, {$pull: {playsers: userId}});
     }
     
 }

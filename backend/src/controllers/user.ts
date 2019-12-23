@@ -2,8 +2,6 @@ import { Request, Response } from "express";
 import HttpStatus from "http-status-codes";
 import AuthService from "../services/auth";
 import { handleError, extractRefreshToken, requestLackingUser } from "./helpers";
-import { UserModel, UserModelType } from "../models/user";
-import { type } from "os";
 
 export const registerUser = (req: Request, res: Response) => {
     const data = req.body;
