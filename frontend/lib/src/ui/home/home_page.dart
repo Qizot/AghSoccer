@@ -97,7 +97,7 @@ class HomePage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
             child: Text(
-              "Dzięki tej aplikacji możesz śledzić rezerwacje boiska i organizować osoby do wspólnej gry na miasteczkowym boisku do piłki nożnej!",
+              "Dzięki tej aplikacji możesz śledzić rezerwacje i organizować osoby do wspólnej gry na miasteczkowym boisku do piłki nożnej!",
               textAlign: TextAlign.center,
             ),
           ),
