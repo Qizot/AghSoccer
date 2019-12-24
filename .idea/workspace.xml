@@ -2,16 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="34c16c2f-834f-4b6c-b8bc-294396070574" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/frontend/lib/src/ui/register_page.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/lib/src/utilities/fade_route.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/lib/src/utilities/slide_right_route.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/lib/src/ui/home/home_page.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/assets/soccer_pitch.png" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/assets/soccer_pitch.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/lib/src/app.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/src/app.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/lib/src/bloc/register_bloc/register_bloc.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/src/bloc/register_bloc/register_bloc.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/lib/src/resources/auth_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/src/resources/auth_provider.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/lib/src/ui/login_form.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/src/ui/login_form.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/lib/src/ui/login_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/src/ui/login_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/lib/src/ui/registerForm.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/src/ui/register_form.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/lib/src/ui/home_page.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/lib/src/ui/login_form.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/src/ui/login/login_form.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/lib/src/ui/login_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/src/ui/login/login_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/lib/src/ui/register_form.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/src/ui/register/register_form.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/lib/src/ui/register_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/src/ui/register/register_page.dart" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -27,8 +26,32 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/frontend/lib/src/app.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="378">
-              <caret line="65" column="30" lean-forward="true" selection-start-line="65" selection-start-column="30" selection-end-line="65" selection-end-column="30" />
+            <state relative-caret-position="210">
+              <caret line="60" column="50" selection-start-line="60" selection-start-column="23" selection-end-line="60" selection-end-column="50" />
+              <folding>
+                <element signature="e#0#62#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/frontend/lib/src/bloc/auth_bloc/auth_bloc.dart">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="303">
+              <caret line="31" column="36" selection-start-line="31" selection-start-column="36" selection-end-line="31" selection-end-column="36" />
+              <folding>
+                <element signature="e#0#63#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/frontend/lib/src/ui/register/register_page.dart">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="270">
+              <caret line="18" column="54" lean-forward="true" selection-start-line="18" selection-start-column="54" selection-end-line="18" selection-end-column="54" />
               <folding>
                 <element signature="e#0#62#0" expanded="true" />
               </folding>
@@ -37,10 +60,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/frontend/lib/src/ui/register_page.dart">
+        <entry file="file://$PROJECT_DIR$/frontend/lib/src/ui/home/home_page.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="161">
-              <caret line="26" column="37" selection-start-line="26" selection-start-column="37" selection-end-line="26" selection-end-column="37" />
+            <state relative-caret-position="438">
+              <caret line="103" column="20" lean-forward="true" selection-start-line="103" selection-start-column="20" selection-end-line="103" selection-end-column="20" />
               <folding>
                 <element signature="e#0#62#0" expanded="true" />
               </folding>
@@ -51,8 +74,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/frontend/lib/src/resources/auth_provider.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="438">
-              <caret line="58" column="29" selection-start-line="58" selection-start-column="29" selection-end-line="58" selection-end-column="29" />
+            <state relative-caret-position="318">
+              <caret line="50" column="59" selection-start-line="50" selection-start-column="59" selection-end-line="50" selection-end-column="59" />
               <folding>
                 <element signature="e#0#22#0" expanded="true" />
               </folding>
@@ -61,22 +84,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/frontend/lib/src/resources/user_repository.dart">
+        <entry file="file://$PROJECT_DIR$/frontend/lib/src/ui/login/login_page.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="15" column="15" selection-start-line="15" selection-start-column="15" selection-end-line="15" selection-end-column="15" />
-              <folding>
-                <element signature="e#0#55#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/frontend/lib/src/ui/login_page.dart">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="348">
-              <caret line="27" column="38" selection-start-line="27" selection-start-column="38" selection-end-line="27" selection-end-column="38" />
+            <state relative-caret-position="393">
+              <caret line="44" column="28" selection-start-line="44" selection-start-column="28" selection-end-line="44" selection-end-column="28" />
               <folding>
                 <element signature="e#0#64#0" expanded="true" />
               </folding>
@@ -85,34 +96,13 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/frontend/lib/src/ui/register_form.dart">
+        <entry file="file://$PROJECT_DIR$/frontend/lib/src/ui/login/login_form.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="36" column="24" selection-start-line="36" selection-start-column="24" selection-end-line="36" selection-end-column="24" />
-              <folding>
-                <element signature="e#1#72#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/frontend/lib/src/ui/login_form.dart">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="735">
-              <caret line="49" column="39" selection-start-line="49" selection-start-column="39" selection-end-line="49" selection-end-column="39" />
+            <state relative-caret-position="423">
+              <caret line="30" column="63" lean-forward="true" selection-start-line="30" selection-start-column="63" selection-end-line="30" selection-end-column="63" />
               <folding>
                 <element signature="e#0#64#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/frontend/lib/src/utilities/fade_route.dart">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="22" column="1" lean-forward="true" selection-start-line="22" selection-start-column="1" selection-end-line="22" selection-end-column="1" />
             </state>
           </provider>
         </entry>
@@ -129,8 +119,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/frontend/lib/src/bloc/register_bloc/register_bloc.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="423">
-              <caret line="42" column="7" lean-forward="true" selection-start-line="42" selection-start-column="7" selection-end-line="42" selection-end-column="7" />
+            <state relative-caret-position="495">
+              <caret line="42" column="7" selection-start-line="42" selection-start-column="7" selection-end-line="42" selection-end-column="7" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
               </folding>
@@ -181,7 +171,6 @@
         <option value="$PROJECT_DIR$/frontend/lib/src/bloc/auth_bloc/auth_state.dart" />
         <option value="$PROJECT_DIR$/frontend/lib/src/bloc/auth_bloc/auth_event.dart" />
         <option value="$PROJECT_DIR$/frontend/lib/src/ui/splash_screen.dart" />
-        <option value="$PROJECT_DIR$/frontend/lib/src/ui/home_page.dart" />
         <option value="$PROJECT_DIR$/frontend/lib/src/ui/login_screen.dart" />
         <option value="$PROJECT_DIR$/frontend/lib/src/bloc/login_bloc/login_event.dart" />
         <option value="$PROJECT_DIR$/frontend/test/widget_test.dart" />
@@ -194,15 +183,20 @@
         <option value="$PROJECT_DIR$/frontend/lib/src/bloc/login_bloc/login_state.dart" />
         <option value="$PROJECT_DIR$/frontend/lib/src/ui/registerForm.dart" />
         <option value="$PROJECT_DIR$/frontend/lib/src/bloc/auth_bloc/auth_bloc.dart" />
-        <option value="$PROJECT_DIR$/frontend/lib/src/app.dart" />
         <option value="$PROJECT_DIR$/frontend/lib/src/resources/auth_provider.dart" />
         <option value="$PROJECT_DIR$/frontend/lib/src/bloc/register_bloc/register_bloc.dart" />
-        <option value="$PROJECT_DIR$/frontend/lib/src/ui/register_form.dart" />
-        <option value="$PROJECT_DIR$/frontend/lib/src/ui/login_page.dart" />
         <option value="$PROJECT_DIR$/frontend/lib/src/utilities/slide_right_route.dart" />
         <option value="$PROJECT_DIR$/frontend/lib/src/utilities/fade_route.dart" />
         <option value="$PROJECT_DIR$/frontend/lib/src/ui/login_form.dart" />
+        <option value="$PROJECT_DIR$/frontend/lib/src/ui/login_page.dart" />
+        <option value="$PROJECT_DIR$/frontend/lib/src/ui/register_form.dart" />
         <option value="$PROJECT_DIR$/frontend/lib/src/ui/register_page.dart" />
+        <option value="$PROJECT_DIR$/frontend/lib/src/ui/home_page.dart" />
+        <option value="$PROJECT_DIR$/frontend/lib/src/ui/register/register_page.dart" />
+        <option value="$PROJECT_DIR$/frontend/lib/src/ui/login/login_page.dart" />
+        <option value="$PROJECT_DIR$/frontend/lib/src/app.dart" />
+        <option value="$PROJECT_DIR$/frontend/lib/src/ui/login/login_form.dart" />
+        <option value="$PROJECT_DIR$/frontend/lib/src/ui/home/home_page.dart" />
       </list>
     </option>
   </component>
@@ -228,8 +222,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -312,6 +306,33 @@
               <item name="frontend" type="462c0819:PsiDirectoryNode" />
               <item name="lib" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="ui" type="462c0819:PsiDirectoryNode" />
+              <item name="home" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="agh_soccer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="agh_soccer" type="462c0819:PsiDirectoryNode" />
+              <item name="frontend" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="ui" type="462c0819:PsiDirectoryNode" />
+              <item name="login" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="agh_soccer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="agh_soccer" type="462c0819:PsiDirectoryNode" />
+              <item name="frontend" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="ui" type="462c0819:PsiDirectoryNode" />
+              <item name="register" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="agh_soccer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="agh_soccer" type="462c0819:PsiDirectoryNode" />
+              <item name="frontend" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="utilities" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
@@ -326,6 +347,13 @@
     <property name="io.flutter.reload.alreadyRun" value="true" />
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
     <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/frontend/lib/src/ui/register" />
+      <recent name="$PROJECT_DIR$/frontend/lib/src/ui/login" />
+      <recent name="$PROJECT_DIR$/frontend/lib/src/ui/home" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -377,22 +405,22 @@
     <editor active="true" />
     <layout>
       <window_info id="Captures" order="0" weight="0.25" />
-      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.23946784" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.24223948" />
       <window_info id="Structure" order="2" side_tool="true" />
       <window_info id="Image Layers" order="3" />
       <window_info id="Designer" order="4" />
       <window_info id="Resources Explorer" order="5" />
       <window_info id="Capture Tool" order="6" />
       <window_info id="Favorites" order="7" side_tool="true" />
-      <window_info anchor="bottom" id="Find" weight="0.3293348" />
       <window_info anchor="bottom" id="Dart Analysis" order="0" weight="0.24972737" />
-      <window_info anchor="bottom" id="Run" order="1" visible="true" weight="0.36205018" />
+      <window_info active="true" anchor="bottom" id="Run" order="1" visible="true" weight="0.36205018" />
       <window_info anchor="bottom" id="TODO" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" />
       <window_info anchor="bottom" id="Terminal" order="4" weight="0.29225737" />
       <window_info anchor="bottom" id="Event Log" order="5" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="6" weight="0.19411123" />
       <window_info anchor="bottom" id="Messages" order="7" weight="0.3293348" />
+      <window_info anchor="bottom" id="Find" order="8" weight="0.3293348" />
       <window_info anchor="right" id="Capture Analysis" order="0" />
       <window_info anchor="right" id="Theme Preview" order="1" />
       <window_info anchor="right" id="Flutter Inspector" order="2" weight="0.23281597" />
@@ -462,26 +490,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/lib/src/bloc/login_blocc.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="30" column="5" selection-start-line="30" selection-start-column="5" selection-end-line="30" selection-end-column="5" />
-          <folding>
-            <element signature="e#0#52#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/lib/src/ui/home_page.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="21" lean-forward="true" selection-start-line="11" selection-start-column="21" selection-end-line="11" selection-end-column="21" />
-          <folding>
-            <element signature="e#0#62#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/lib/src/bloc/login_blocc.dart" />
     <entry file="file://$PROJECT_DIR$/frontend/pubspec.yaml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
@@ -499,13 +508,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/lib/src/ui/login_screen.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="690">
-          <caret line="49" column="23" selection-start-line="49" selection-start-column="23" selection-end-line="49" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/lib/src/ui/login_screen.dart" />
     <entry file="file://$PROJECT_DIR$/frontend/lib/src/bloc/auth_bloc/auth_state.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
@@ -584,32 +587,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/test/widget_test.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="15" column="28" selection-start-line="15" selection-start-column="28" selection-end-line="15" selection-end-column="28" />
-          <folding>
-            <element signature="e#357#398#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/frontend/lib/main.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="532">
           <caret line="37" column="26" selection-start-line="37" selection-start-column="16" selection-end-line="37" selection-end-column="26" />
           <folding>
             <element signature="e#0#62#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/lib/src/bloc/auth_bloc/auth_bloc.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="303">
-          <caret line="22" selection-start-line="22" selection-end-line="22" />
-          <folding>
-            <element signature="e#0#63#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -624,23 +607,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/lib/src/resources/auth_provider.dart">
+    <entry file="file://$PROJECT_DIR$/frontend/lib/src/ui/register/register_form.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="438">
-          <caret line="58" column="29" selection-start-line="58" selection-start-column="29" selection-end-line="58" selection-end-column="29" />
+        <state relative-caret-position="825">
+          <caret line="59" column="50" selection-start-line="59" selection-start-column="50" selection-end-line="60" selection-end-column="36" />
           <folding>
-            <element signature="e#0#22#0" expanded="true" />
+            <element signature="e#1#72#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/lib/src/bloc/register_bloc/register_bloc.dart">
+    <entry file="file://$PROJECT_DIR$/frontend/lib/src/utilities/fade_route.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="423">
-          <caret line="42" column="7" lean-forward="true" selection-start-line="42" selection-start-column="7" selection-end-line="42" selection-end-column="7" />
-          <folding>
-            <element signature="e#0#20#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="330">
+          <caret line="22" column="1" selection-start-line="22" selection-start-column="1" selection-end-line="22" selection-end-column="1" />
         </state>
       </provider>
     </entry>
@@ -651,57 +631,90 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/lib/src/bloc/register_bloc/register_bloc.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="495">
+          <caret line="42" column="7" selection-start-line="42" selection-start-column="7" selection-end-line="42" selection-end-column="7" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/lib/src/resources/auth_provider.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="318">
+          <caret line="50" column="59" selection-start-line="50" selection-start-column="59" selection-end-line="50" selection-end-column="59" />
+          <folding>
+            <element signature="e#0#22#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/lib/src/ui/login/login_page.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="393">
+          <caret line="44" column="28" selection-start-line="44" selection-start-column="28" selection-end-line="44" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/frontend/lib/src/app.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="65" column="30" lean-forward="true" selection-start-line="65" selection-start-column="30" selection-end-line="65" selection-end-column="30" />
+        <state relative-caret-position="210">
+          <caret line="60" column="50" selection-start-line="60" selection-start-column="23" selection-end-line="60" selection-end-column="50" />
           <folding>
             <element signature="e#0#62#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/lib/src/utilities/fade_route.dart">
+    <entry file="file://$PROJECT_DIR$/frontend/lib/src/bloc/auth_bloc/auth_bloc.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="22" column="1" lean-forward="true" selection-start-line="22" selection-start-column="1" selection-end-line="22" selection-end-column="1" />
+        <state relative-caret-position="303">
+          <caret line="31" column="36" selection-start-line="31" selection-start-column="36" selection-end-line="31" selection-end-column="36" />
+          <folding>
+            <element signature="e#0#63#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/lib/src/ui/login_form.dart">
+    <entry file="file://$PROJECT_DIR$/frontend/lib/src/ui/register/register_page.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="735">
-          <caret line="49" column="39" selection-start-line="49" selection-start-column="39" selection-end-line="49" selection-end-column="39" />
+        <state relative-caret-position="270">
+          <caret line="18" column="54" lean-forward="true" selection-start-line="18" selection-start-column="54" selection-end-line="18" selection-end-column="54" />
+          <folding>
+            <element signature="e#0#62#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/test/widget_test.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="15" column="28" selection-start-line="15" selection-start-column="28" selection-end-line="15" selection-end-column="28" />
+          <folding>
+            <element signature="e#357#398#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/lib/src/ui/login/login_form.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="423">
+          <caret line="30" column="63" lean-forward="true" selection-start-line="30" selection-start-column="63" selection-end-line="30" selection-end-column="63" />
           <folding>
             <element signature="e#0#64#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/lib/src/ui/register_form.dart">
+    <entry file="file://$PROJECT_DIR$/frontend/lib/src/ui/home/home_page.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="36" column="24" selection-start-line="36" selection-start-column="24" selection-end-line="36" selection-end-column="24" />
-          <folding>
-            <element signature="e#1#72#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/lib/src/ui/login_page.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="348">
-          <caret line="27" column="38" selection-start-line="27" selection-start-column="38" selection-end-line="27" selection-end-column="38" />
-          <folding>
-            <element signature="e#0#64#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/lib/src/ui/register_page.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
-          <caret line="26" column="37" selection-start-line="26" selection-start-column="37" selection-end-line="26" selection-end-column="37" />
+        <state relative-caret-position="438">
+          <caret line="103" column="20" lean-forward="true" selection-start-line="103" selection-start-column="20" selection-end-line="103" selection-end-column="20" />
           <folding>
             <element signature="e#0#62#0" expanded="true" />
           </folding>

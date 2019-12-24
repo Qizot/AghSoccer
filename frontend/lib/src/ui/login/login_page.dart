@@ -1,10 +1,8 @@
 import 'package:agh_soccer/src/bloc/login_bloc/login_bloc.dart';
 import 'package:agh_soccer/src/bloc/auth_bloc/auth_bloc.dart';
-import 'package:agh_soccer/src/bloc/register_bloc/register_bloc.dart';
 import 'package:agh_soccer/src/resources/user_repository.dart';
-import 'package:agh_soccer/src/ui/login_form.dart';
+import 'package:agh_soccer/src/ui/login/login_form.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -27,21 +25,11 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: MultiBlocProvider(
-        providers: [
-          BlocProvider<LoginBloc>(
-            create: (BuildContext context) => LoginBloc(
-                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-                userRepository: widget.userRepository
-            ),
-          ),
-          BlocProvider<RegisterBloc>(
-            create: (BuildContext context) => RegisterBloc(
-              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-              userRepository: widget.userRepository,
-            ),
-          ),
-        ],
+      body: BlocProvider<LoginBloc>(
+        create: (BuildContext context) => LoginBloc(
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            userRepository: widget.userRepository
+        ),
         child: loginForm(),
       ),
     );

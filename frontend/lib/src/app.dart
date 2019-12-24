@@ -1,9 +1,8 @@
 import 'package:agh_soccer/src/bloc/auth_bloc/auth_bloc.dart';
 import 'package:agh_soccer/src/bloc/auth_bloc/auth_state.dart';
 import 'package:agh_soccer/src/resources/user_repository.dart';
-import 'package:agh_soccer/src/ui/home_page.dart';
-import 'package:agh_soccer/src/ui/login_page.dart';
-import 'package:agh_soccer/src/ui/register_page.dart';
+import 'package:agh_soccer/src/ui/home/home_page.dart';
+import 'package:agh_soccer/src/ui/login/login_page.dart';
 import 'package:agh_soccer/src/ui/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

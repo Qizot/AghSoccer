@@ -48,12 +48,12 @@ class _RegisterFormState extends State<RegisterForm> {
             child: Column(
               children: [
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Email'),
-                  controller: _emailController,
-                ),
-                TextFormField(
                   decoration: InputDecoration(labelText: 'Nazwa użytkownika'),
                   controller: _nicknameController,
+                ),
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Email'),
+                  controller: _emailController,
                 ),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Hasło'),
