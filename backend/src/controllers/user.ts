@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import HttpStatus from "http-status-codes";
 import AuthService from "../services/auth";
 import { extractRefreshToken, handleError, requestLackingUser } from "./helpers";
+import { validationResult } from "express-validator";
 
 export const registerUser = (req: Request, res: Response) => {
     const data = req.body;
@@ -12,6 +13,14 @@ export const registerUser = (req: Request, res: Response) => {
             success: false,
             message: "missing fields",
         });
+    }
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(HttpStatus.BAD_REQUEST).json({
+            success: false,
+            message: errors.array()
+        })
     }
 
     AuthService.registerUser({email, nickname, password})

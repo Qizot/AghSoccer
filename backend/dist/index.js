@@ -10,7 +10,7 @@ const index_1 = __importDefault(require("./routes/index"));
 const app = express_1.default();
 const port = 8080; // default port to listen
 const mongoUri = "mongodb://localhost/agh_soccer";
-app.use(morgan_1.default('dev'));
+app.use(morgan_1.default("dev"));
 app.use(express_1.default.json());
 app.listen(port, () => {
     // tslint:disable-next-line:no-console
@@ -19,7 +19,7 @@ app.listen(port, () => {
 app.use("/api", index_1.default);
 mongoose_1.default.connect(mongoUri, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
 }, (err) => {
     if (err) {
         console.log(err);

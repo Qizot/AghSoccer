@@ -46,6 +46,7 @@ const schema = new Schema({
         required: true,
         minlength: 4,
         maxlength: 20,
+        unique: true
 
     },
     credentials: {

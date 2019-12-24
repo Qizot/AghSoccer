@@ -3,9 +3,13 @@ import { confirmMatch, createMatch, deleteMatch, derollUser, editMatch, enrollUs
 import { deleteUser, loginUser, me, refreshToken, registerUser } from "../controllers/user";
 import {hasRole, validateToken} from "../middleware/auth";
 import { checkDate, checkDateIfPresent } from "./validators";
+import { check } from "express-validator";
 const router = express.Router();
 
-router.post("/register", registerUser);
+router.post("/register", [
+    check("email").isEmail(),
+    registerUser
+]);
 router.post("/login", loginUser);
 router.post("/token", refreshToken);
 
