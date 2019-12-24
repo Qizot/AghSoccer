@@ -18,7 +18,6 @@ class _RegisterFormState extends State<RegisterForm> {
 
   @override
   Widget build(BuildContext context) {
-    print(context);
     _onRegisterButtonPressed() {
       BlocProvider.of<RegisterBloc>(context).add(
         RegisterButtonPressed(
@@ -39,6 +38,9 @@ class _RegisterFormState extends State<RegisterForm> {
             ),
           );
         }
+        if (state is RegisterSuccess) {
+          Navigator.pop(context);
+        }
       },
       child: BlocBuilder<RegisterBloc, RegisterState>(
         builder: (context, state) {
@@ -48,6 +50,10 @@ class _RegisterFormState extends State<RegisterForm> {
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Email'),
                   controller: _emailController,
+                ),
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Nazwa użytkownika'),
+                  controller: _nicknameController,
                 ),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Hasło'),
@@ -62,18 +68,7 @@ class _RegisterFormState extends State<RegisterForm> {
                   child: RaisedButton(
                       onPressed:
                       state is! RegisterLoading ? _onRegisterButtonPressed : null,
-                      child: Text('Zaloguj się'),
-                      shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
-                  ),
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  child: RaisedButton(
-                      color: Theme.of(context).accentColor,
-                      onPressed: () {
-                        print("register button pressed");
-                      },
-                      child: Text("Zarejestruj się"),
+                      child: Text('Zarejestruj konto'),
                       shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
                   ),
                 ),

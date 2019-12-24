@@ -3,6 +3,7 @@ import 'package:agh_soccer/src/bloc/auth_bloc/auth_state.dart';
 import 'package:agh_soccer/src/resources/user_repository.dart';
 import 'package:agh_soccer/src/ui/home_page.dart';
 import 'package:agh_soccer/src/ui/login_page.dart';
+import 'package:agh_soccer/src/ui/register_page.dart';
 import 'package:agh_soccer/src/ui/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,8 +13,44 @@ class App extends StatelessWidget {
 
   App({Key key, @required this.userRepository}) : super(key: key);
 
+
+
+//  @override
+//  Widget build(BuildContext context) {
+//    return BlocListener<AuthenticationBloc, AuthenticationState>(
+//      listener: (_, state) {
+//        print(state);
+//        if (state is AuthenticationLoading) {
+//          Navigator.pushNamed(context, "/");
+//        }
+//        if (state is AuthenticationAuthenticated) {
+//          Navigator.pushNamed(context, "/home");
+//        }
+//        if (state is AuthenticationUnauthenticated) {
+//          Navigator.pushNamed(context, "/login");
+//        }
+//      },
+//      child: MaterialApp(
+//        theme: ThemeData(
+//          brightness: Brightness.dark,
+//          primarySwatch: Colors.orange,
+//          accentColor: Colors.blueGrey
+//        ),
+//        routes: {
+//          "/": (context) => SplashPage(),
+//          "/home": (context) => HomePage(),
+//          "/login": (context) => LoginPage(userRepository: userRepository),
+//          "/register": (context) => RegisterPage(userRepository: userRepository),
+//        },
+//        initialRoute: "/",
+//
+//      )
+//    );
+//  }
+
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       theme: ThemeData(
           brightness: Brightness.dark,

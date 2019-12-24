@@ -1,36 +1,34 @@
-import 'package:agh_soccer/src/bloc/login_bloc/login_bloc.dart';
 import 'package:agh_soccer/src/bloc/auth_bloc/auth_bloc.dart';
 import 'package:agh_soccer/src/bloc/register_bloc/register_bloc.dart';
 import 'package:agh_soccer/src/resources/user_repository.dart';
-import 'package:agh_soccer/src/ui/login_form.dart';
+import 'package:agh_soccer/src/ui/register_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 
-class LoginPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
 
-  final UserRepository userRepository;
+  final UserRepository userRepository = new UserRepository();
 
-  LoginPage({Key key, @required this.userRepository})
-      : assert(userRepository != null),
-        super(key: key);
+  RegisterPage({Key key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-  bool showLoginPage = true;
+class _RegisterPageState extends State<RegisterPage> {
+  bool showRegisterPage = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black87,
       body: MultiBlocProvider(
         providers: [
-          BlocProvider<LoginBloc>(
-            create: (BuildContext context) => LoginBloc(
+          BlocProvider<RegisterBloc>(
+            create: (BuildContext context) => RegisterBloc(
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
                 userRepository: widget.userRepository
             ),
@@ -42,19 +40,20 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         ],
-        child: loginForm(),
+        child: registerForm(),
       ),
     );
   }
 
-  Widget loginForm() {
+
+  Widget registerForm() {
     return ListView(
         children: <Widget>[
           SizedBox(height: 20.0),
           Image(image: AssetImage("assets/soccer_pitch.png")),
           Padding(
             padding: const EdgeInsets.all(10.0),
-            child: LoginForm(),
+            child: RegisterForm(),
           ),
         ]
     );

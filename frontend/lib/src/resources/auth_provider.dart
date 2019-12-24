@@ -48,7 +48,7 @@ class AuthProvider {
   }
 
   Future<void> register({@required String email, @required String nickname, @required String password}) async {
-    Response res = await post(api + "/token", headers: {
+    Response res = await post(api + "/register", headers: {
       "Content-Type": "application/json"
     }, body: jsonEncode({
       "email": email,
@@ -56,7 +56,7 @@ class AuthProvider {
       "password": password
     }));
 
-    if (res.statusCode == 200) {
+    if (res.statusCode == 201) {
       return UserToken.fromJson(jsonDecode(res.body));
     } else {
       throw Exception(jsonDecode(res.body)["message"]);
