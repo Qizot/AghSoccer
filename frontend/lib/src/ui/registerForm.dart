@@ -1,42 +1,37 @@
-import 'package:agh_soccer/src/bloc/login_bloc/login_bloc.dart';
-import 'package:agh_soccer/src/bloc/login_bloc/login_event.dart';
-import 'package:agh_soccer/src/bloc/login_bloc/login_state.dart';
+
+import 'package:agh_soccer/src/bloc/register_bloc/register_event.dart';
 import 'package:agh_soccer/src/bloc/register_bloc/register_bloc.dart';
 import 'package:agh_soccer/src/bloc/register_bloc/register_state.dart';
-import 'package:agh_soccer/src/ui/registerForm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 
-class LoginForm extends StatefulWidget {
+class RegisterForm extends StatefulWidget {
   @override
-  State<LoginForm> createState() => _LoginFormState();
+  State<RegisterForm> createState() => _RegisterFormState();
 }
 
-class _LoginFormState extends State<LoginForm> {
+class _RegisterFormState extends State<RegisterForm> {
   final _emailController = TextEditingController();
+  final _nicknameController = TextEditingController();
   final _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    _onLoginButtonPressed() {
-      BlocProvider.of<LoginBloc>(context).add(
-        LoginButtonPressed(
+    print(context);
+    _onRegisterButtonPressed() {
+      BlocProvider.of<RegisterBloc>(context).add(
+        RegisterButtonPressed(
           email: _emailController.text.trim(),
+          nickname: _nicknameController.text,
           password: _passwordController.text,
         ),
       );
     }
 
-    _onRegisterButtonPressed() {
-      Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => RegisterForm())
-      );
-    }
-
-    return BlocListener<LoginBloc, LoginState>(
+    return BlocListener<RegisterBloc, RegisterState>(
       listener: (context, state) {
-        if (state is LoginFailure) {
+        if (state is RegisterFailure) {
           Scaffold.of(context).showSnackBar(
             SnackBar(
               content: Text('${state.error}'),
@@ -45,7 +40,7 @@ class _LoginFormState extends State<LoginForm> {
           );
         }
       },
-      child: BlocBuilder<LoginBloc, LoginState>(
+      child: BlocBuilder<RegisterBloc, RegisterState>(
         builder: (context, state) {
           return Form(
             child: Column(
@@ -65,26 +60,25 @@ class _LoginFormState extends State<LoginForm> {
                 SizedBox(
                   width: double.infinity,
                   child: RaisedButton(
-                    onPressed:
-                      state is! LoginLoading ? _onLoginButtonPressed : null,
-                    child: Text('Zaloguj się'),
-                    shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
+                      onPressed:
+                      state is! RegisterLoading ? _onRegisterButtonPressed : null,
+                      child: Text('Zaloguj się'),
+                      shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
                   ),
                 ),
                 SizedBox(
                   width: double.infinity,
                   child: RaisedButton(
-                    color: Theme.of(context).accentColor,
-                    onPressed: () {
-                      _onRegisterButtonPressed();
-                      print("register button pressed");
-                    },
-                    child: Text("Zarejestruj się"),
-                    shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
+                      color: Theme.of(context).accentColor,
+                      onPressed: () {
+                        print("register button pressed");
+                      },
+                      child: Text("Zarejestruj się"),
+                      shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
                   ),
                 ),
                 Container(
-                  child: state is LoginLoading
+                  child: state is RegisterLoading
                       ? CircularProgressIndicator()
                       : null,
                 ),
