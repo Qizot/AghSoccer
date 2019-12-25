@@ -13,40 +13,6 @@ class App extends StatelessWidget {
   App({Key key, @required this.userRepository}) : super(key: key);
 
 
-
-//  @override
-//  Widget build(BuildContext context) {
-//    return BlocListener<AuthenticationBloc, AuthenticationState>(
-//      listener: (_, state) {
-//        print(state);
-//        if (state is AuthenticationLoading) {
-//          Navigator.pushNamed(context, "/");
-//        }
-//        if (state is AuthenticationAuthenticated) {
-//          Navigator.pushNamed(context, "/home");
-//        }
-//        if (state is AuthenticationUnauthenticated) {
-//          Navigator.pushNamed(context, "/login");
-//        }
-//      },
-//      child: MaterialApp(
-//        theme: ThemeData(
-//          brightness: Brightness.dark,
-//          primarySwatch: Colors.orange,
-//          accentColor: Colors.blueGrey
-//        ),
-//        routes: {
-//          "/": (context) => SplashPage(),
-//          "/home": (context) => HomePage(),
-//          "/login": (context) => LoginPage(userRepository: userRepository),
-//          "/register": (context) => RegisterPage(userRepository: userRepository),
-//        },
-//        initialRoute: "/",
-//
-//      )
-//    );
-//  }
-
   @override
   Widget build(BuildContext context) {
 
@@ -65,6 +31,7 @@ class App extends StatelessWidget {
             return HomePage();
           }
           if (state is AuthenticationUnauthenticated) {
+            print("this should render login page");
             return LoginPage(userRepository: userRepository);
           }
           if (state is AuthenticationLoading) {

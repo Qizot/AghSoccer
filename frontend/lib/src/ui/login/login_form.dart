@@ -13,6 +13,7 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
+  static GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -47,6 +48,7 @@ class _LoginFormState extends State<LoginForm> {
       child: BlocBuilder<LoginBloc, LoginState>(
         builder: (context, state) {
           return Form(
+            key: _formKey,
             child: Column(
               children: [
                 TextFormField(
@@ -65,7 +67,7 @@ class _LoginFormState extends State<LoginForm> {
                   width: double.infinity,
                   child: RaisedButton(
                     onPressed:
-                      state is! LoginLoading ? _onLoginButtonPressed : null,
+                    state is! LoginLoading ? _onLoginButtonPressed : null,
                     child: Text('Zaloguj się'),
                     shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
                   ),
