@@ -1,8 +1,8 @@
+import 'package:agh_soccer/src/bloc/auth_bloc/auth_state.dart';
 import 'package:agh_soccer/src/bloc/login_bloc/login_bloc.dart';
 import 'package:agh_soccer/src/bloc/auth_bloc/auth_bloc.dart';
 import 'package:agh_soccer/src/resources/user_repository.dart';
 import 'package:agh_soccer/src/ui/login/login_form.dart';
-import 'package:agh_soccer/src/ui/login/test_form.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,11 +10,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginPage extends StatefulWidget {
 
-  final UserRepository userRepository;
+  final UserRepository userRepository = new UserRepository();
 
-  LoginPage({Key key, @required this.userRepository})
-      : assert(userRepository != null),
-        super(key: key);
+  LoginPage({Key key}): super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -33,7 +31,14 @@ class _LoginPageState extends State<LoginPage> {
             authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
             userRepository: widget.userRepository
         ),
-        child: loginForm(),
+        child: BlocListener<AuthenticationBloc, AuthenticationState>(
+          listener: (context, state) {
+            if (state is AuthenticationAuthenticated) {
+              Navigator.of(context).pushReplacementNamed("/home");
+            }
+          },
+          child: loginForm()
+        ),
       ),
     );
   }

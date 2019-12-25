@@ -83,10 +83,9 @@ class AuthProvider {
       "Authorization": "Bearer " + token
     });
 
-    if (res.statusCode == 200) {
-      return User.fromJson(jsonDecode(res.body));
-    } else {
+    if (res.statusCode != 200) {
       throw Exception(jsonDecode(res.body)["message"]);
     }
+    return;
   }
 }

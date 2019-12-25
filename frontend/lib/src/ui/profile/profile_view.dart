@@ -79,10 +79,8 @@ class ProfileView extends StatelessWidget {
       child: Text("Usuń"),
       color: Colors.red,
       onPressed:  () {
-        Navigator.of(context).popUntil((_) => true);
-
-        // BROKEN AS FUCK
-        //BlocProvider.of<ProfileBloc>(context).add(ProfileDelete());
+        BlocProvider.of<ProfileBloc>(context).add(ProfileDelete());
+        Navigator.of(context).pushNamedAndRemoveUntil("/login", ModalRoute.withName("/home"));
       }
     );
     // set up the AlertDialog

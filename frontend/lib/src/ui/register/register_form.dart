@@ -39,7 +39,7 @@ class _RegisterFormState extends State<RegisterForm> {
           );
         }
         if (state is RegisterSuccess) {
-          Navigator.pop(context);
+          Navigator.of(context).pop();
         }
       },
       child: BlocBuilder<RegisterBloc, RegisterState>(

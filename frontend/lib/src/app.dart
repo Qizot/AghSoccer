@@ -22,26 +22,44 @@ class App extends StatelessWidget {
           primarySwatch: Colors.orange,
           accentColor: Colors.blueGrey
       ),
-      home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-        builder: (context, state) {
-          if (state is AuthenticationUninitialized) {
-            return SplashPage();
-          }
-          if (state is AuthenticationAuthenticated) {
-            return HomePage();
-          }
-          if (state is AuthenticationUnauthenticated) {
-            print("this should render login page");
-            return LoginPage(userRepository: userRepository);
-          }
-          if (state is AuthenticationLoading) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          return null;
-        },
-      ),
+      routes: {
+        "/": (context) => SplashPage(),
+        "/login": (context) => LoginPage(),
+        "/home": (context) => HomePage(),
+      },
+      initialRoute: "/",
     );
   }
+
+//  @override
+//  Widget build(BuildContext context) {
+//
+//    return MaterialApp(
+//      theme: ThemeData(
+//          brightness: Brightness.dark,
+//          primarySwatch: Colors.orange,
+//          accentColor: Colors.blueGrey
+//      ),
+//      home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+//        builder: (context, state) {
+//          if (state is AuthenticationUninitialized) {
+//            return SplashPage();
+//          }
+//          if (state is AuthenticationAuthenticated) {
+//            return HomePage();
+//          }
+//          if (state is AuthenticationUnauthenticated) {
+//            print("this should render login page");
+//            return LoginPage(userRepository: userRepository);
+//          }
+//          if (state is AuthenticationLoading) {
+//            return Center(
+//              child: CircularProgressIndicator(),
+//            );
+//          }
+//          return null;
+//        },
+//      ),
+//    );
+//  }
 }

@@ -41,15 +41,19 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
         yield ProfileFetched();
       } catch (error) {
-        yield ProfileFailure(error: error.toString().replaceAll("Exception: ", ""));
+        print("during fetch");
+        print(error);
+        yield ProfileFailure(error: error.toString().replaceAll("Exception: ", "Dupa "));
       }
     }
     if (event is ProfileDelete) {
       try {
-        //await userRepository.deleteAccount(authenticationBloc);
+        await userRepository.deleteAccount(authenticationBloc);
         authenticationBloc.add(LoggedOut());
       } catch (error) {
-        yield ProfileFailure(error: error.toString().replaceAll("Exception: ", ""));
+        print("during delete");
+        print(error);
+        yield ProfileFailure(error: error.toString().replaceAll("Exception: ", "Kutas "));
       }
     }
   }

@@ -68,10 +68,14 @@ class _ProfilePageState extends State<ProfilePage> {
           );
         }
         if (state is ProfileFailure) {
-          return Container();
+          Scaffold.of(context).showSnackBar(
+            SnackBar(
+              content: Text('${state.error}'),
+              backgroundColor: Colors.red,
+            ),
+          );
         }
-
-        return null;
+        return Container();
       },
     );
   }
