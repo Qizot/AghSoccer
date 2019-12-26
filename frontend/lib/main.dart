@@ -7,7 +7,6 @@ import 'package:agh_soccer/src/app.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/date_symbol_data_local.dart';
 
 
 class SimpleBlocDelegate extends BlocDelegate {

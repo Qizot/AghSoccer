@@ -7,7 +7,10 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+
+
 class HomePage extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,24 +31,30 @@ class HomePage extends StatelessWidget {
               icon: Icons.account_circle,
               text: "Twój profil",
               onTap: () =>
-                  Navigator.push(context, FadeRoute(page: ProfilePage()))
+                Navigator.popAndPushNamed(context, "/profile"),
             ),
             _createDrawerItem(
               icon: Icons.av_timer,
               text: "Rezerwacje boiska",
               onTap: () =>
-                  Navigator.push(context, FadeRoute(page: MatchesPage()))
+                  Navigator.popAndPushNamed(context, "/matches"),
             ),
             _createDrawerItem(
               icon: Icons.exit_to_app,
               text: "Wyloguj się",
-              onTap: () => BlocProvider.of<AuthenticationBloc>(context).add(LoggedOut()),
+              onTap: () {
+                Navigator.of(context).pop();
+                BlocProvider.of<AuthenticationBloc>(context).add(LoggedOut());
+                Navigator.of(context).pushReplacementNamed("/login");
+              },
             ),
             Divider(),
           ],
         ),
       ),
-      body: _welcome(),
+      body: WillPopScope(
+          child: _welcome(),
+      ),
     );
   }
 

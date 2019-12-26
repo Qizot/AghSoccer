@@ -1,7 +1,7 @@
 import 'package:agh_soccer/src/bloc/match_bloc/match_event.dart';
 import 'package:agh_soccer/src/bloc/match_bloc/match_bloc.dart';
+import 'package:agh_soccer/src/models/match_filter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
@@ -82,9 +82,12 @@ class _SearchMatchesState extends State<SearchMatches> {
   void _search(context) => widget.bloc.add(
       MatchFetchByFilter(
           name: _nameController.text,
-          timeFrom: timeToDate(_timeFrom),
-          timeTo: timeToDate(_timeTo),
-          showPrivate: true)
+          filter: MatchFilter(
+            timeFrom: timeToDate(_timeFrom),
+            timeTo: timeToDate(_timeTo),
+            showPrivate: true
+          )
+      )
   );
 
   void _clear() {

@@ -25,11 +25,8 @@ class MatchFetchByFilter extends MatchEvent {
   final MatchFilter filter;
   final String name;
   MatchFetchByFilter({
-    @required String name,
-    @required DateTime timeFrom,
-    @required DateTime timeTo,
-    @required bool showPrivate,
-  }) : filter = MatchFilter(timeFrom: timeFrom, timeTo: timeTo, showPrivate: showPrivate), name = name;
+    this.filter, this.name
+  });
 
 
   @override
