@@ -39,10 +39,11 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         authenticationBloc.add(LoggedIn(token: token));
         yield RegisterSuccess();
       } catch (error) {
+          print(error.toString());
         if (error.toString().contains("nickname")) {
           yield RegisterFailure(error: "Podana nazwa użytkownika jest już zajęta");
         } else if (error.toString().contains("email")) {
-          yield RegisterFailure(error: "Podana email jest już zajęty");
+          yield RegisterFailure(error: "Podany email jest już zajęty");
         } else {
           print(error.toString());
           yield RegisterFailure(error: error.toString().replaceAll("Exception: ", "Nieznany błąd: "));

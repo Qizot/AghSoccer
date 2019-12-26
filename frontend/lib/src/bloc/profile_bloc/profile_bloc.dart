@@ -5,7 +5,6 @@ import 'package:agh_soccer/src/bloc/auth_bloc/auth_event.dart';
 import 'package:agh_soccer/src/bloc/profile_bloc/profile_event.dart';
 import 'package:agh_soccer/src/bloc/profile_bloc/profile_state.dart';
 import 'package:agh_soccer/src/models/user.dart';
-import 'package:agh_soccer/src/models/user_token.dart';
 import 'package:agh_soccer/src/resources/user_repository.dart';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';

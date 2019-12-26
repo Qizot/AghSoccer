@@ -1,25 +1,25 @@
-import "dart:async";
-
 class Validators {
-  final validateEmail = StreamTransformer<String, String>.fromHandlers(
-      handleData: (String email, EventSink<String> sink) {
-        //A standard email check regex
-        Pattern pattern =
-            r"^(([^<>()[\]\\.,;:\s@\”]+(\.[^<>()[\]\\.,;:\s@\”]+)*)|(\”.+\”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$";
-        RegExp regex = new RegExp(pattern);
-        if (regex.hasMatch(email))
-        sink.add(email);
-        else
-        sink.addError("Enter a valid email");
-      }
-  );
-  final validatePassword = StreamTransformer<String, String>.fromHandlers(
-      handleData: (String password, EventSink<String> sink) {
-        if (password.length > 7) {
-          sink.add(password);
-        } else {
-          sink.addError("Password must be at least 8 characters long");
-        }
-      }
-  );
+  static final validNickname = RegExp(r'^[a-zA-Z0-9]{4,}$');
+  static final validEmail = new RegExp(r"^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$");
+
+  String validateNickname(String nickname) {
+    if (!validNickname.hasMatch(nickname)) {
+      return "Nazwa użykownika musi składać się z co najmniej 4 liter";
+    }
+    return null;
+  }
+
+  String validateEmail(String email) {
+    if (!validEmail.hasMatch(email)) {
+      return "Wprowadź email w prawidłowej formie";
+    }
+    return null;
+  }
+
+  String validatePassword(String password) {
+    if (password.length < 6) {
+      return "Hasło musi posiadać co najmniej 6 znaków";
+    }
+    return null;
+  }
 }

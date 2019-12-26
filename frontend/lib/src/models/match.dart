@@ -1,13 +1,15 @@
-class Match {
-  String sId;
-  String name;
-  String description;
-  bool confirmed;
-  String ownerId;
-  List<String> players;
-  DateTime startTime;
-  DateTime endTime;
-  bool isPrivate;
+import 'package:equatable/equatable.dart';
+
+class Match extends Equatable {
+  final String sId;
+  final String name;
+  final String description;
+  final bool confirmed;
+  final String ownerId;
+  final List<String> players;
+  final DateTime startTime;
+  final DateTime endTime;
+  final bool isPrivate;
 
   Match(
       {this.sId,
@@ -20,16 +22,18 @@ class Match {
         this.endTime,
         this.isPrivate});
 
-  Match.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
-    name = json['name'];
-    description = json['description'];
-    confirmed = json['confirmed'];
-    ownerId = json['ownerId'];
-    players = json['players'].cast<String>();
-    startTime = DateTime.parse(json['startTime']);
-    endTime = DateTime.parse(json['endTime']);
-    isPrivate = json['isPrivate'];
+  factory Match.fromJson(Map<String, dynamic> json) {
+    return Match(
+      sId: json['_id'],
+      name: json['name'],
+      description: json['description'],
+      confirmed: json['confirmed'],
+      ownerId: json['ownerId'],
+      players: json['players'].cast<String>(),
+      startTime: DateTime.parse(json['startTime']),
+      endTime: DateTime.parse(json['endTime']),
+      isPrivate: json['isPrivate']
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -45,4 +49,7 @@ class Match {
     data['isPrivate'] = this.isPrivate;
     return data;
   }
+
+  @override
+  List<Object> get props => [sId, name, description, confirmed, ownerId, players, startTime, endTime, isPrivate];
 }

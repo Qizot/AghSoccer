@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:agh_soccer/src/config/api_config.dart';
 import 'package:agh_soccer/src/models/user.dart';
 import 'package:agh_soccer/src/models/user_token.dart';
 import 'package:flutter/material.dart';
@@ -7,13 +8,11 @@ import 'package:http/http.dart';
 
 class AuthProvider {
 
-  final api = "http://192.168.0.105:8080/api";
-
   Future<UserToken> login({
     @required String email,
     @required String password,
   }) async {
-    Response res = await post(api + "/login", headers: {
+    Response res = await post(ApiConfig.instance.apiUri + "/login", headers: {
       "Content-Type": "application/json"
     }, body: jsonEncode({
       "email": email,
@@ -35,7 +34,7 @@ class AuthProvider {
   }
 
   Future<UserToken> refreshToken({@required String refreshToken}) async {
-    Response res = await post(api + "/token", headers: {
+    Response res = await post(ApiConfig.instance.apiUri + "/token", headers: {
       "Content-Type": "application/json"
     }, body: jsonEncode({
       "refreshToken": refreshToken
@@ -49,7 +48,7 @@ class AuthProvider {
   }
 
   Future<void> register({@required String email, @required String nickname, @required String password}) async {
-    Response res = await post(api + "/register", headers: {
+    Response res = await post(ApiConfig.instance.apiUri + "/register", headers: {
       "Content-Type": "application/json"
     }, body: jsonEncode({
       "email": email,
@@ -65,7 +64,7 @@ class AuthProvider {
   }
 
   Future<User> getProfile({@required String token}) async {
-    Response res = await get(api + "/me", headers: {
+    Response res = await get(ApiConfig.instance.apiUri + "/me", headers: {
       "Content-Type": "application-json",
       "Authorization": "Bearer " + token
     });
@@ -78,7 +77,7 @@ class AuthProvider {
   }
 
   Future<void> deleteAccount({@required String token}) async {
-    Response res = await delete(api + "/me", headers: {
+    Response res = await delete(ApiConfig.instance.apiUri + "/me", headers: {
       "Content-Type": "application-json",
       "Authorization": "Bearer " + token
     });
