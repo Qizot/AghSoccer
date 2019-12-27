@@ -49,9 +49,7 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      body: WillPopScope(
-          child: _welcome(),
-      ),
+      body: _welcome(context),
     );
   }
 
@@ -91,36 +89,50 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _welcome() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text("Witaj w AGH Soccer!",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.w600
+  Widget _welcome(context) {
+    return Container(
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
+              stops: [
+                0.2,
+                1
+              ],
+              colors: [
+                Colors.black38,
+                Colors.black,
+              ])),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text("Witaj w AGH Soccer!",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.w600
+              )
+            ),
+            Divider(),
+            Padding(
+              padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+              child: Text(
+                "Dzięki tej aplikacji możesz śledzić rezerwacje i organizować osoby do wspólnej gry na miasteczkowym boisku do piłki nożnej!",
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Divider(),
+            Padding(
+              padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+              child: Text(
+                "Wyszukuj mecze, zbieraj osoby oraz baw się świetnie przy najpopularniejszym sporcie na świecie!",
+                textAlign: TextAlign.center,
+              ),
             )
-          ),
-          Divider(),
-          Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-            child: Text(
-              "Dzięki tej aplikacji możesz śledzić rezerwacje i organizować osoby do wspólnej gry na miasteczkowym boisku do piłki nożnej!",
-              textAlign: TextAlign.center,
-            ),
-          ),
-          Divider(),
-          Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-            child: Text(
-              "Wyszukuj mecze, zbieraj osoby oraz baw się świetnie przy najpopularniejszym sporcie na świecie!",
-              textAlign: TextAlign.center,
-            ),
-          )
-        ],
+          ],
+        ),
       ),
     );
   }
