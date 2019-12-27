@@ -112,7 +112,8 @@ const kickUserOut = async (owner: MatchOwner, matchId: string,  userId: string) 
         }
 
         await new MatchModel(match).derollUser(user);
-        return {success: true, message: "user has been kicked out"};
+	const updated = await getOwnersMatch(owner, matchId); 
+        return {success: true, message: "user has been kicked out", data: new MatchModel(updated).plainMatch};
     } catch (err) {
         if (err instanceof ServiceMessageError) { throw err; }
 
