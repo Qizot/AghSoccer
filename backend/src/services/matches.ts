@@ -26,6 +26,8 @@ interface MatchService {
     deleteMatch: (owner: MatchOwner, matchId: string) => Promise<ServiceMessage>;
     confirmMatch: (dsnetToken: string) => Promise<ServiceMessage>;
     kickUserOut: (owner: MatchOwner, matchId: string, playerId: string) => Promise<ServiceMessage>;
+
+    // enroll and deroll return updated match document so frontend doesn't have to fetch it again
     enrollUser: (userId: string, matchId: string, password?: string) => Promise<ServiceMessage>;
     derollUser: (userId: string, matchId: string) => Promise<ServiceMessage>;
     getMatch: (matchId: string) => Promise<PlainMatch>;
@@ -104,6 +106,11 @@ const kickUserOut = async (owner: MatchOwner, matchId: string,  userId: string) 
     try {
         const match = await getOwnersMatch(owner, matchId);
         const user = await getUserNickname(userId);
+
+        if (!match.players.includes(user)) {
+            throw new ServiceMessageError(400, "given user has not been enrolled");
+        }
+
         await new MatchModel(match).derollUser(user);
         return {success: true, message: "user has been kicked out"};
     } catch (err) {
@@ -125,8 +132,13 @@ const enrollUser = async (userId: string, matchId: string, password?: string) =>
             throw new ServiceMessageError(403, "passwords don't match");
         }
 
-        await new MatchModel(match).enrollUser(user);
-        return {success: true, message: "user has been enrolled"};
+        if (match.players.includes(user)) {
+            throw new ServiceMessageError(400, "user has been already enrolled");
+        }
+
+        await new MatchModel(match).enrollUser(user) as MatchModelType;
+        const updated = await MatchModel.findMatch(matchId) as MatchModelType;
+        return {success: true, message: "user has been enrolled", data: new MatchModel(updated).plainMatch};
     } catch (err) {
         if (err instanceof ServiceMessageError) { throw err; }
         console.log("enrolling: ", err);
@@ -142,8 +154,13 @@ const derollUser = async (userId: string, matchId: string) => {
             throw new ServiceMessageError(404, "match has not been found");
         }
 
-        await new MatchModel(match).derollUser(user);
-        return {success: true, message: "user has been derolled"};
+        if (!match.players.includes(user)) {
+            throw new ServiceMessageError(400, "user has not been enrolled");
+        }
+
+        await new MatchModel(match).derollUser(user) as MatchModelType;
+        const updated = await MatchModel.findMatch(matchId) as MatchModelType;
+        return {success: true, message: "user has been derolled", data: new MatchModel(updated).plainMatch};
     } catch (err) {
         if (err instanceof ServiceMessageError) { throw err; }
 
