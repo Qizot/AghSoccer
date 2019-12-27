@@ -25,7 +25,7 @@ interface MatchService {
     editMatch: (owner: MatchOwner, matchId: string, editMatch: Partial<EditMatch>) => Promise<ServiceMessage>;
     deleteMatch: (owner: MatchOwner, matchId: string) => Promise<ServiceMessage>;
     confirmMatch: (dsnetToken: string) => Promise<ServiceMessage>;
-    kickUserOut: (owner: MatchOwner, matchId: string, playerId: string) => Promise<ServiceMessage>;
+    kickUserOut: (owner: MatchOwner, matchId: string, userNickname: string) => Promise<ServiceMessage>;
 
     // enroll and deroll return updated match document so frontend doesn't have to fetch it again
     enrollUser: (userId: string, matchId: string, password?: string) => Promise<ServiceMessage>;
@@ -102,17 +102,16 @@ const confirmMatch = async (dsnetToken: string) => {
     return {success: false, message: "it won't even get here so why even bother"};
 };
 
-const kickUserOut = async (owner: MatchOwner, matchId: string,  userId: string) => {
+const kickUserOut = async (owner: MatchOwner, matchId: string,  userNickname: string) => {
     try {
         const match = await getOwnersMatch(owner, matchId);
-        const user = await getUserNickname(userId);
 
-        if (!match.players.includes(user)) {
+        if (!match.players.includes(userNickname)) {
             throw new ServiceMessageError(400, "given user has not been enrolled");
         }
 
-        await new MatchModel(match).derollUser(user);
-	const updated = await getOwnersMatch(owner, matchId); 
+        await new MatchModel(match).derollUser(userNickname);
+	    const updated = await getOwnersMatch(owner, matchId); 
         return {success: true, message: "user has been kicked out", data: new MatchModel(updated).plainMatch};
     } catch (err) {
         if (err instanceof ServiceMessageError) { throw err; }

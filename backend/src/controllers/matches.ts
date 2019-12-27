@@ -90,17 +90,20 @@ export const confirmMatch = (req: Request, res: Response) => {
     .catch((err) => handleError(res, err));
 };
 
+
+// request
+// {"user": "user nickname"}
 export const kickUserOut = (req: Request, res: Response) => {
     const matchId = req.params.matchId;
     const data = req.body;
-    const {userId} = data;
+    const {user} = data;
     const {id} = req.user;
 
     if (!id) {
         return requestLackingUser(res);
     }
 
-    MatchService.kickUserOut({id}, matchId, userId)
+    MatchService.kickUserOut({id}, matchId, user)
     .then((msg) => res.status(HttpStatus.OK).json(msg))
     .catch((err) => handleError(res, err));
 };
