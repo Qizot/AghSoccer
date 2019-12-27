@@ -1,5 +1,6 @@
 import { CreateMatchType, MatchModel, MatchModelType, MatchRepository, PlainMatch } from "../models/match";
 import { ServiceMessage, ServiceMessageError } from "./service_message";
+import { UserModel, UserModelType } from "../models/user";
 
 interface EditMatch {
     name: string;
@@ -42,6 +43,14 @@ const getOwnersMatch = async (owner: MatchOwner, matchId: string) => {
     }
     return match;
 };
+
+const getUserNickname = async (userId: string) => {
+    const user = await UserModel.findUser({id: userId}) as UserModelType;
+    if (!user) {
+        throw new ServiceMessageError(404, "user has not been found");
+    }
+    return user.nickname;
+}
 
 const createMatch = async (owner: MatchOwner, match: CreateMatchType) => {
     try {
@@ -94,7 +103,8 @@ const confirmMatch = async (dsnetToken: string) => {
 const kickUserOut = async (owner: MatchOwner, matchId: string,  userId: string) => {
     try {
         const match = await getOwnersMatch(owner, matchId);
-        await new MatchModel(match).derollUser(userId);
+        const user = await getUserNickname(userId);
+        await new MatchModel(match).derollUser(user);
         return {success: true, message: "user has been kicked out"};
     } catch (err) {
         if (err instanceof ServiceMessageError) { throw err; }
@@ -106,6 +116,7 @@ const kickUserOut = async (owner: MatchOwner, matchId: string,  userId: string) 
 const enrollUser = async (userId: string, matchId: string, password?: string) => {
     try {
         const match = await MatchModel.findMatch(matchId) as MatchModelType;
+        const user = await getUserNickname(userId);
         if (!match) {
             throw new ServiceMessageError(404, "match has not been found");
         }
@@ -114,7 +125,7 @@ const enrollUser = async (userId: string, matchId: string, password?: string) =>
             throw new ServiceMessageError(403, "passwords don't match");
         }
 
-        await new MatchModel(match).enrollUser(userId);
+        await new MatchModel(match).enrollUser(user);
         return {success: true, message: "user has been enrolled"};
     } catch (err) {
         if (err instanceof ServiceMessageError) { throw err; }
@@ -126,11 +137,12 @@ const enrollUser = async (userId: string, matchId: string, password?: string) =>
 const derollUser = async (userId: string, matchId: string) => {
     try {
         const match = await MatchModel.findMatch(matchId) as MatchModelType;
+        const user = await getUserNickname(userId);
         if (!match) {
             throw new ServiceMessageError(404, "match has not been found");
         }
 
-        await new MatchModel(match).derollUser(userId);
+        await new MatchModel(match).derollUser(user);
         return {success: true, message: "user has been derolled"};
     } catch (err) {
         if (err instanceof ServiceMessageError) { throw err; }

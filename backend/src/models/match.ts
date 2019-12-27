@@ -62,7 +62,7 @@ const schema = new Schema({
     players: {
         type: [
             {
-                type: Schema.Types.ObjectId,
+                type: String,
             },
         ],
         default: [],
@@ -199,9 +199,9 @@ export class MatchModel {
         return this._matchModel.save();
     }
 
-    public enrollUser(userId: string): Promise<mongoose.Document> {
+    public enrollUser(nickname: string): Promise<mongoose.Document> {
         return new Promise((resolve, reject) => {
-            this._matchModel.update({ $addToSet: {players: userId}}).exec((err, item) => {
+            this._matchModel.update({ $addToSet: {players: nickname}}).exec((err, item) => {
                 if (err) {
                     reject(err);
                     return;
@@ -211,9 +211,9 @@ export class MatchModel {
         });
     }
 
-    public derollUser(userId: string): Promise<mongoose.Document> {
+    public derollUser(nickname: string): Promise<mongoose.Document> {
         return new Promise((resolve, reject) => {
-            this._matchModel.update({$pull: {players: userId}}).exec((err, item) => {
+            this._matchModel.update({$pull: {players: nickname}}).exec((err, item) => {
                 if (err) {
                     reject(err);
                     return;
