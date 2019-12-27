@@ -19,6 +19,8 @@ class MatchUpdateLoading extends MatchState {}
 
 class MatchDeleteLoading extends MatchState {}
 
+class MatchAddFormOpened extends MatchState {}
+
 class MatchFetchedById extends MatchState {
   final Match match;
 
@@ -46,14 +48,15 @@ class MatchFetchedByFilter extends MatchState {
 
 class MatchCreated extends MatchState {
   final Match match;
+  final String message;
 
-  MatchCreated({this.match});
+  MatchCreated({this.match, this.message});
 
   @override
   List<Object> get props => match.props;
 
   @override
-  String toString() => 'MatchCreated { match: $match}';
+  String toString() => 'MatchCreated { message: $message, match: $match}';
 
 }
 

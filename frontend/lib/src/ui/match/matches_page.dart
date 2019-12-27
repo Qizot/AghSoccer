@@ -3,7 +3,7 @@ import 'package:agh_soccer/src/bloc/match_bloc/match_event.dart';
 import 'package:agh_soccer/src/bloc/match_bloc/match_state.dart';
 import 'package:agh_soccer/src/models/match.dart';
 import 'package:agh_soccer/src/models/match_filter.dart';
-import 'package:agh_soccer/src/resources/match_repository.dart';
+import 'package:agh_soccer/src/ui/match/create_edit_match_modal.dart';
 import 'package:agh_soccer/src/ui/match/match_card.dart';
 import 'package:agh_soccer/src/ui/match/match_details.dart';
 import 'package:agh_soccer/src/ui/match/match_search.dart';
@@ -20,11 +20,20 @@ class _MatchesPageState extends State<MatchesPage> {
 
   List<Match> _matches = [];
 
-  void _showFilter(context) {
+  @override
+  void initState() {
+    BlocProvider.of<MatchBloc>(context).add(MatchFetchByFilter(filter: defaultFilter()));
+    super.initState();
+  }
+
+  void _showFilter() {
+    MatchBloc bloc = BlocProvider.of<MatchBloc>(context);
     showModalBottomSheet(
         context: context,
         builder: (context) {
-          return SearchMatches(bloc: BlocProvider.of<MatchBloc>(context));
+          return BlocBuilder<MatchBloc, MatchState>(
+            builder: (context, _) => SearchMatches(bloc: bloc)
+          );
         },
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
@@ -45,26 +54,19 @@ class _MatchesPageState extends State<MatchesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<MatchBloc>(
-        create: (context) => MatchBloc(matchRepository: MatchRepository()),
-        child: Scaffold(
+    return Scaffold(
           appBar: AppBar(
             centerTitle: true,
             title: Text("Rezerwacje"),
             actions: <Widget>[
-              BlocBuilder<MatchBloc, MatchState>(
-                builder: (context, _) =>
-                    IconButton(
-                      icon: const Icon(Icons.search),
-                      onPressed: () => _showFilter(context),
-                    )
+              IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: () => _showFilter(),
               )
-
             ],
           ),
           body: BlocListener<MatchBloc, MatchState>(
             listener: (context, state) {
-              print("LISTENER " + state.toString());
               if (state is MatchFetchedByFilter) {
                 setState(() {
                   _matches = state.matches;
@@ -72,6 +74,15 @@ class _MatchesPageState extends State<MatchesPage> {
               }
               if (state is MatchInitial) {
                 BlocProvider.of<MatchBloc>(context).add(MatchFetchByFilter(filter: defaultFilter()));
+              }
+              if (state is MatchCreated) {
+                BlocProvider.of<MatchBloc>(context).add(MatchFetchByFilter(filter: defaultFilter()));
+                Scaffold.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('${state.message}'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
               }
             },
             child: BlocBuilder<MatchBloc, MatchState>(
@@ -92,12 +103,17 @@ class _MatchesPageState extends State<MatchesPage> {
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              // Add your onPressed code here!
+              Navigator.push(context, MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return _createMatchModal();
+                  },
+                  fullscreenDialog: true,
+              ));
             },
             child: Icon(Icons.add),
             backgroundColor: Colors.green,
           ),
-        ));
+    );
   }
 
 
@@ -106,10 +122,23 @@ class _MatchesPageState extends State<MatchesPage> {
         itemCount: _matches.length,
         itemBuilder: (context, index) {
           return GestureDetector(
-              onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => MatchDetails(matchId: _matches[index].sId))),
+              onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => MatchDetails(match: _matches[index]))),
               child: MatchCard(match: _matches[index])
           );
         }
+    );
+  }
+
+  Widget _createMatchModal() {
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text("Tworzenie meczu")
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: SingleChildScrollView(child: CreateEditMatchModal()),
+      )
     );
   }
 }

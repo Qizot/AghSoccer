@@ -14,7 +14,8 @@ class MatchProvider {
   };
 
   Map<String, String> headersWithToken({String token}) {
-    return MatchProvider.headers..putIfAbsent("Authorization", () => "Bearer " + token);
+    headers["Authorization"] = "Bearer " + token;
+    return headers;
   }
 
   Exception serverError(Response res) {

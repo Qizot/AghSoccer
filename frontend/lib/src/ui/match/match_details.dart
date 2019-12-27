@@ -14,14 +14,14 @@ import 'package:intl/intl.dart';
 
 class MatchDetails extends StatefulWidget {
   final String matchId;
+  Match match;
 
-  MatchDetails({this.matchId});
+  MatchDetails({@required Match match}) : match = match, matchId = match.sId;
 
   State<MatchDetails> createState() => _MatchDetailsState();
 }
 
 class _MatchDetailsState extends State<MatchDetails> {
-  Match match;
 
   final _headerTextStyle = TextStyle(
     fontSize: 20,
@@ -42,12 +42,12 @@ class _MatchDetailsState extends State<MatchDetails> {
           matchRepository: MatchRepository())
         ..add(MatchDetailsInitialize(matchId: widget.matchId)),
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(backgroundColor: Colors.black,),
         body: BlocListener<MatchDetailsBloc, MatchDetailsState>(
             listener: (context, state) {
               if (state is MatchDetailsRefreshed) {
                 setState(() {
-                  match = state.match;
+                  widget.match = state.match;
                 });
                 if (state.message != null) {
                   Scaffold.of(context).hideCurrentSnackBar();
@@ -73,7 +73,6 @@ class _MatchDetailsState extends State<MatchDetails> {
             },
             child: BlocBuilder<MatchDetailsBloc, MatchDetailsState>(
               builder: (context, state) {
-                print("BUILDER: " + state.toString());
                 if (state is MatchDetailsRefreshLoading) {
                   return Container(
                     color: Colors.black,
@@ -148,14 +147,14 @@ class _MatchDetailsState extends State<MatchDetails> {
         child:  Row(
           children: <Widget>[
             Icon(
-                match.isPrivate
+                widget.match.isPrivate
                     ? Icons.lock_outline
                     : Icons.lock_open,
-                color: match.isPrivate ? Colors.amber : Colors.grey),
+                color: widget.match.isPrivate ? Colors.amber : Colors.grey),
             SizedBox(
               width: 5.0,
             ),
-            Text(match.name, style: _headerTextStyle),
+            Text(widget.match.name, style: _headerTextStyle),
             SizedBox(
               width: 10
             ),
@@ -187,7 +186,7 @@ class _MatchDetailsState extends State<MatchDetails> {
         children: <Widget>[
           Text("Opis: ", style: _headerTextStyle, textAlign: TextAlign.left),
           SizedBox(height: 10),
-          Text(match.description, style: _normalText, textAlign: TextAlign.justify)
+          Text(widget.match.description, style: _normalText, textAlign: TextAlign.justify)
         ],
       ),
     );
@@ -203,9 +202,9 @@ class _MatchDetailsState extends State<MatchDetails> {
           Text("Kiedy: ", style: _headerTextStyle),
           SizedBox(width: 10),
           Icon(Icons.date_range),
-          Text(DateFormat.yMMMMd("pl_PL").format(match.startTime), style: _normalText),
+          Text(DateFormat.yMMMMd("pl_PL").format(widget.match.startTime), style: _normalText),
           SizedBox(width: 10),
-          Text(timeFormat.format(match.startTime) + " - " + timeFormat.format(match.endTime), style: _normalText)
+          Text(timeFormat.format(widget.match.startTime) + " - " + timeFormat.format(widget.match.endTime), style: _normalText)
         ],
       )
     );
@@ -220,11 +219,11 @@ class _MatchDetailsState extends State<MatchDetails> {
           ListView.builder(
             key: Key("players"),
             shrinkWrap: true,
-            itemCount: match.players.length,
+            itemCount: widget.match.players.length,
             itemBuilder: (context, index) =>
               ListTile(
                 leading: Icon(Icons.account_circle, size: 50),
-                title: Text(match.players[index]),
+                title: Text(widget.match.players[index]),
                 subtitle: Text("# ${index + 1}"),
               ),
           )
@@ -239,7 +238,7 @@ class _MatchDetailsState extends State<MatchDetails> {
       label: Text("Dołącz"),
       color: Colors.green,
       onPressed: () async {
-        if (match.isPrivate) {
+        if (widget.match.isPrivate) {
           final password = await _askForPassword(context);
           if (password != null) {
             BlocProvider.of<MatchDetailsBloc>(context).add(MatchDetailsEnroll(password: password));

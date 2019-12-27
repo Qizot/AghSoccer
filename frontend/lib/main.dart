@@ -1,6 +1,8 @@
 import 'package:agh_soccer/src/bloc/auth_bloc/auth_bloc.dart';
 import 'package:agh_soccer/src/bloc/auth_bloc/auth_event.dart';
+import 'package:agh_soccer/src/bloc/match_bloc/match_bloc.dart';
 import 'package:agh_soccer/src/config/api_config.dart';
+import 'package:agh_soccer/src/resources/match_repository.dart';
 import 'package:agh_soccer/src/resources/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:agh_soccer/src/app.dart';
@@ -36,12 +38,18 @@ void main() {
   ApiConfig(apiUri: "http://192.168.0.105:8080/api");
 
   runApp(
-    BlocProvider<AuthenticationBloc>(
-      create: (context) {
-        return AuthenticationBloc(userRepository: userRepository)
-          ..add(AppStarted());
-      },
-      child: App(userRepository: userRepository),
-    ),
+      MultiBlocProvider(
+        providers: [
+          BlocProvider<AuthenticationBloc>(
+            create: (context) =>
+             AuthenticationBloc(userRepository: userRepository)
+              ..add(AppStarted())
+          ),
+          BlocProvider<MatchBloc>(
+            create: (BuildContext context) => MatchBloc(matchRepository: MatchRepository()),
+          ),
+        ],
+        child: App(userRepository: userRepository)
+      ),
   );
 }

@@ -16,8 +16,16 @@ class MatchBloc extends Bloc<MatchEvent, MatchState> {
 
   MatchState get initialState => MatchInitial();
 
+  String parseError(String error) {
+    return error.replaceAll("Exception: ", "");
+  }
+  
   @override
   Stream<MatchState> mapEventToState(MatchEvent event) async* {
+
+    if (event is MatchResetAdding) {
+      yield MatchAddFormOpened();
+    }
 
     if (event is MatchFetchById) {
       yield MatchLoading();
@@ -25,7 +33,7 @@ class MatchBloc extends Bloc<MatchEvent, MatchState> {
         final match = await matchRepository.getMatch(matchId: event.matchId);
         yield MatchFetchedById(match: match);
       } catch (error) {
-        yield MatchFailure(error: error);
+        yield MatchFailure(error: parseError(error.toString()));
       }
     }
 
@@ -35,8 +43,7 @@ class MatchBloc extends Bloc<MatchEvent, MatchState> {
         final matches = await matchRepository.getMatches(filter: event.filter);
         yield MatchFetchedByFilter(matches: matches, name: event.name);
       } catch (error) {
-        print(error);
-        yield MatchFailure(error: error);
+        yield MatchFailure(error: parseError(error.toString()));
       }
     }
 
@@ -45,9 +52,9 @@ class MatchBloc extends Bloc<MatchEvent, MatchState> {
 
       try {
         final match = await matchRepository.createMatch(match: event.match);
-        yield MatchCreated(match: match);
+        yield MatchCreated(match: match, message: "Utworzono mecz");
       } catch (error) {
-        yield MatchFailure(error: error);
+        yield MatchFailure(error: parseError(error.toString()));
       }
     }
 
@@ -58,7 +65,7 @@ class MatchBloc extends Bloc<MatchEvent, MatchState> {
         await matchRepository.updateMatch(matchId: event.matchId, match: event.match);
         yield MatchUpdated();
       } catch (error) {
-        yield MatchFailure(error: error);
+        yield MatchFailure(error: parseError(error.toString()));
       }
     }
 
@@ -69,7 +76,7 @@ class MatchBloc extends Bloc<MatchEvent, MatchState> {
         await matchRepository.deleteMatch(matchId: event.matchId);
         yield MatchDeleted();
       } catch (error) {
-        yield MatchFailure(error: error);
+        yield MatchFailure(error: parseError(error.toString()));
       }
     }
 

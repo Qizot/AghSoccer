@@ -20,7 +20,7 @@ class AuthenticationBloc
       ) async* {
     if (event is AppStarted) {
       final bool hasToken = await userRepository.hasToken();
-
+      // TODO: refresh token every time app has started
       if (hasToken) {
         yield AuthenticationAuthenticated();
       } else {

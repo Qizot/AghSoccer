@@ -5,7 +5,12 @@ import 'package:meta/meta.dart';
 
 abstract class MatchEvent extends Equatable {
   const MatchEvent();
+
+  @override
+  List<Object> get props => [];
 }
+
+class MatchResetAdding extends MatchEvent {}
 
 class MatchFetchById extends MatchEvent {
   final String matchId;
@@ -20,6 +25,7 @@ class MatchFetchById extends MatchEvent {
       'MatchFetchById { matchId: $matchId}';
 
 }
+
 
 class MatchFetchByFilter extends MatchEvent {
   final MatchFilter filter;

@@ -45,7 +45,6 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         } else if (error.toString().contains("email")) {
           yield RegisterFailure(error: "Podany email jest już zajęty");
         } else {
-          print(error.toString());
           yield RegisterFailure(error: error.toString().replaceAll("Exception: ", "Nieznany błąd: "));
         }
       }
