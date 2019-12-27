@@ -33,5 +33,19 @@ class MatchRepository {
     return matchProvider.updateMatch(matchId: matchId, match: match, token: token);
   }
 
+  Future<Match> enroll({@required String matchId, String password}) async {
+    final token = await userRepository.getToken();
+    return matchProvider.enroll(matchId: matchId, password: password, token: token);
+  }
+
+  Future<Match> deroll({@required String matchId}) async {
+    final token = await userRepository.getToken();
+    return matchProvider.deroll(matchId: matchId, token: token);
+  }
+
+  Future<Match> kickUser({@required String matchId, @required String nickname}) async {
+    final token = await userRepository.getToken();
+    return matchProvider.kickUser(matchId: matchId, nickname: nickname, token: token);
+  }
 
 }

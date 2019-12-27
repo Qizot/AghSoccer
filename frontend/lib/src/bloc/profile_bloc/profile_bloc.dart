@@ -35,7 +35,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
       try {
 
-        final user = await userRepository.getProfile(authenticationBloc);
+        final user = await userRepository.getProfile();
         _user.add(user);
 
         yield ProfileFetched();
@@ -47,7 +47,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     }
     if (event is ProfileDelete) {
       try {
-        await userRepository.deleteAccount(authenticationBloc);
+        await userRepository.deleteAccount();
         authenticationBloc.add(LoggedOut());
       } catch (error) {
         print("during delete");

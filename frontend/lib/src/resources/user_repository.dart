@@ -1,4 +1,3 @@
-import 'package:agh_soccer/src/bloc/auth_bloc/auth_bloc.dart';
 import 'package:agh_soccer/src/models/user.dart';
 import 'package:agh_soccer/src/models/user_token.dart';
 import 'package:agh_soccer/src/resources/auth_provider.dart';
@@ -46,12 +45,12 @@ class UserRepository {
     return  prefs.get("token");
   }
 
-  Future<User> getProfile(AuthenticationBloc bloc) async {
+  Future<User> getProfile() async {
     final token = await getToken();
     return await authProvider.getProfile(token: token);
   }
 
-  Future<void> deleteAccount(AuthenticationBloc bloc) async {
+  Future<void> deleteAccount() async {
     final token = await getToken();
     return await authProvider.deleteAccount(token: token);
   }

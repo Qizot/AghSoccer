@@ -121,4 +121,76 @@ class MatchProvider {
     }
   }
 
+  Future<Match> enroll({@required String matchId, @required String token, String password}) async {
+    final res = await post(ApiConfig.instance.apiUri + "/matches/" + matchId + "/enroll",
+        headers: headersWithToken(token: token),
+        body: jsonEncode(
+            password == null ? {} : {"password": password }
+        )
+    );
+
+    final jsonResponse = jsonDecode(res.body);
+
+    switch (res.statusCode) {
+      case 200: {
+        return Match.fromJson(jsonResponse["data"]);
+      }
+      case 400: {
+        throw Exception("Użytkownik jest już dołączył do meczu");
+      }
+      case 403: {
+        throw Exception("Niepoprawne hasło");
+      }
+      default: {
+        throw serverError(res);
+      }
+    }
+  }
+
+  Future<Match> deroll({@required String matchId, @required String token}) async {
+    final res = await post(ApiConfig.instance.apiUri + "/matches/" + matchId + "/deroll",
+        headers: headersWithToken(token: token),
+        body: jsonEncode({})
+    );
+
+    final jsonResponse = jsonDecode(res.body);
+
+    switch (res.statusCode) {
+      case 200: {
+        return Match.fromJson(jsonResponse["data"]);
+      }
+      case 400: {
+        throw Exception("Użytkownik nie jest zapisany na mecz");
+      }
+      default: {
+        throw serverError(res);
+      }
+    }
+  }
+
+  Future<Match> kickUser({@required String matchId, @required String nickname, @required String token}) async {
+    final res = await post(ApiConfig.instance.apiUri + "/matches/" + matchId + "/kick",
+        headers: headersWithToken(token: token),
+        body: jsonEncode({
+          "user": nickname
+        })
+    );
+
+    final jsonResponse = jsonDecode(res.body);
+    switch (res.statusCode) {
+      case 200: {
+        return Match.fromJson(jsonResponse["data"]);
+      }
+      case 400: {
+        throw Exception("Podany użytkownik nie jest zapisany na mecz: $nickname");
+      }
+      case 403: {
+        throw Exception("Tylko twórca meczy może wyrzucać innych użytkowników");
+      }
+      default: {
+        throw serverError(res);
+      }
+    }
+  }
+
 }
