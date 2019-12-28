@@ -1,10 +1,14 @@
-import express from "express";
+import express, {Request, Response} from "express";
 import { confirmMatch, createMatch, deleteMatch, derollUser, editMatch, enrollUser, getMatch, getMatches, kickUserOut } from "../controllers/matches";
 import { deleteUser, loginUser, me, refreshToken, registerUser } from "../controllers/user";
 import {hasRole, validateToken} from "../middleware/auth";
 import { checkDate, checkDateIfPresent } from "./validators";
 import { check } from "express-validator";
 const router = express.Router();
+
+router.get("/ping", (req: Request, res: Response) => {
+    res.status(200).send("pong");
+});
 
 router.post("/register", [
     check("email").isEmail(),
