@@ -87,4 +87,16 @@ class AuthProvider {
     }
     return;
   }
+
+  Future<void> ping() async {
+    final errMsg = "Nie udało się połączyć z serwerem. \n\n Spróbuj ponownie kiedy indziej";
+    try {
+      Response res = await get(ApiConfig.instance.apiUri + "/ping");
+      if (res.statusCode != 200) {
+        throw Exception(errMsg);
+      }
+    } catch (error) {
+      throw Exception(errMsg);
+    }
+  }
 }

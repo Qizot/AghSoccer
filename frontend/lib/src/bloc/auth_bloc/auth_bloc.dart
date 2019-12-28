@@ -1,5 +1,7 @@
+
 import 'package:agh_soccer/src/bloc/auth_bloc/auth_event.dart';
 import 'package:agh_soccer/src/bloc/auth_bloc/auth_state.dart';
+import 'package:agh_soccer/src/resources/auth_provider.dart';
 import 'package:agh_soccer/src/resources/user_repository.dart';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
@@ -19,11 +21,27 @@ class AuthenticationBloc
       AuthenticationEvent event,
       ) async* {
     if (event is AppStarted) {
-      final bool hasToken = await userRepository.hasToken();
-      // TODO: refresh token every time app has started
-      if (hasToken) {
-        yield AuthenticationAuthenticated();
-      } else {
+      yield AuthenticationLoading();
+
+      bool serverIsResponding = false;
+      try {
+        await AuthProvider().ping();
+        serverIsResponding = true;
+      } catch (error) {
+        yield AuthenticationServerNotResponding(message: error.toString().replaceAll("Exception: ", ""));
+      }
+
+      if (await userRepository.hasToken() && serverIsResponding) {
+        final refreshToken = await userRepository.getRefreshToken();
+
+        try {
+          await userRepository.refreshToken(refreshToken);
+          yield AuthenticationAuthenticated();
+        } catch(error) {
+
+          yield AuthenticationUnauthenticated();
+        }
+      } else if (serverIsResponding) {
         yield AuthenticationUnauthenticated();
       }
     }

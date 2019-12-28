@@ -1,7 +1,6 @@
 import 'package:agh_soccer/src/bloc/match_bloc/match_bloc.dart';
 import 'package:agh_soccer/src/bloc/match_bloc/match_event.dart';
 import 'package:agh_soccer/src/bloc/match_bloc/match_state.dart';
-import 'package:agh_soccer/src/bloc/match_details_bloc/match_details_state.dart';
 import 'package:agh_soccer/src/models/match.dart';
 import 'package:agh_soccer/src/models/match_filter.dart';
 import 'package:agh_soccer/src/ui/match/create_edit_match_modal.dart';

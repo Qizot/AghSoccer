@@ -45,6 +45,11 @@ class UserRepository {
     return  prefs.get("token");
   }
 
+  Future<String> getRefreshToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.get("refreshToken");
+  }
+
   Future<User> getProfile() async {
     final token = await getToken();
     return await authProvider.getProfile(token: token);
