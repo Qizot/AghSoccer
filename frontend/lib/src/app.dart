@@ -5,6 +5,7 @@ import 'package:agh_soccer/src/ui/match/matches_page.dart';
 import 'package:agh_soccer/src/ui/profile/profile_page.dart';
 import 'package:agh_soccer/src/ui/splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class App extends StatelessWidget {
   final UserRepository userRepository;
@@ -16,6 +17,13 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return MaterialApp(
+      supportedLocales: [
+        const Locale('pl', 'PL')
+      ],
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
       theme: ThemeData(
           brightness: Brightness.dark,
           primarySwatch: Colors.orange,

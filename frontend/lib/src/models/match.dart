@@ -30,8 +30,8 @@ class Match extends Equatable {
       confirmed: json['confirmed'],
       ownerId: json['ownerId'],
       players: json['players'].cast<String>(),
-      startTime: DateTime.parse(json['startTime']),
-      endTime: DateTime.parse(json['endTime']),
+      startTime: DateTime.parse(json['startTime']).toLocal(),
+      endTime: DateTime.parse(json['endTime']).toLocal(),
       isPrivate: json['isPrivate']
     );
   }

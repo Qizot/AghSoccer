@@ -12,7 +12,7 @@ class CreateEditMatch extends Equatable {
     this.description,
     this.password,
     this.startTime,
-    this.endTime
+    this.endTime,
   });
 
   factory CreateEditMatch.fromJson(Map<String, dynamic> json) {

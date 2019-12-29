@@ -1,15 +1,31 @@
 import 'package:agh_soccer/src/bloc/match_bloc/match_bloc.dart';
 import 'package:agh_soccer/src/bloc/match_bloc/match_event.dart';
 import 'package:agh_soccer/src/bloc/match_bloc/match_state.dart';
+import 'package:agh_soccer/src/bloc/match_details_bloc/match_details_bloc.dart';
+import 'package:agh_soccer/src/models/match.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
-
 enum PickTime { from, to }
 
+enum CreateEditMatchMode { create, edit }
+
 class CreateEditMatchModal extends StatefulWidget {
+  Match _match;
+  CreateEditMatchMode _mode;
+
+  CreateEditMatchModal({
+    Match match,
+    CreateEditMatchMode mode = CreateEditMatchMode.create
+  }) {
+    _mode = mode;
+    if (mode == CreateEditMatchMode.edit) {
+      assert(match != null);
+      _match = match;
+    }
+  }
   State<CreateEditMatchModal> createState() => _CreateEditMatchModalState();
 }
 
@@ -20,22 +36,43 @@ class _CreateEditMatchModalState extends State<CreateEditMatchModal> {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _passwordController = TextEditingController();
+
   final _dateController = TextEditingController();
   final _startTimeController = TextEditingController();
   final _endTimeController = TextEditingController();
+
   bool _showPassword = false;
   DateTime _date = DateTime.now().add(Duration(hours: 1));
   DateTime _startTime;
   DateTime _endTime;
 
+  bool _isCreateMode() {
+    return widget._mode == CreateEditMatchMode.create;
+  }
+
   @override
   void initState() {
+    initializeDateFormatting();
+
+    if (!_isCreateMode()) {
+      _nameController.text = widget._match.name;
+      _descriptionController.text = widget._match.description;
+
+      _date = widget._match.startTime;
+      _startTime = widget._match.startTime;
+      _endTime = widget._match.endTime;
+
+      _dateController.text = DateFormat.yMMMMd("pl_PL").format(_date);
+      _startTimeController.text = DateFormat.Hm().format(_startTime);
+      _endTimeController.text = DateFormat.Hm().format(_endTime);
+    }
     bloc = BlocProvider.of<MatchBloc>(context);
     bloc.add(MatchResetAdding());
     super.initState();
   }
 
   _combineDateWithTime(DateTime date, DateTime time) {
+    print(time.toIso8601String());
     return DateTime(
         date.year, date.month, date.day, time.hour, time.minute, time.second);
   }
@@ -43,6 +80,18 @@ class _CreateEditMatchModalState extends State<CreateEditMatchModal> {
   void _onCreateButtonPresses() {
     if (_formKey.currentState.validate()) {
       bloc.add(MatchCreate(
+          name: _nameController.text,
+          description: _descriptionController.text,
+          password: _showPassword ? _passwordController.text : null,
+          startTime: _combineDateWithTime(_date, _startTime),
+          endTime: _combineDateWithTime(_date, _endTime)));
+    }
+  }
+
+  void _onUpdateButtonPressed() {
+    if (_formKey.currentState.validate()) {
+      bloc.add(MatchUpdate(
+          matchId: widget._match.sId,
           name: _nameController.text,
           description: _descriptionController.text,
           password: _showPassword ? _passwordController.text : null,
@@ -64,7 +113,7 @@ class _CreateEditMatchModalState extends State<CreateEditMatchModal> {
 
     setState(() {
       if (date != null) {
-      _dateController.text = DateFormat.yMMMMd("pl_PL").format(date);
+        _dateController.text = DateFormat.yMMMMd("pl_PL").format(date);
         _date = date;
       }
     });
@@ -74,8 +123,7 @@ class _CreateEditMatchModalState extends State<CreateEditMatchModal> {
     if (_date == null) {
       _date = DateTime.now();
     }
-    return DateTime(
-        _date.year, _date.month, _date.day, time.hour, time.minute);
+    return DateTime(_date.year, _date.month, _date.day, time.hour, time.minute);
   }
 
   Future<void> selectTime(BuildContext context, PickTime type) async {
@@ -90,7 +138,7 @@ class _CreateEditMatchModalState extends State<CreateEditMatchModal> {
 
     if (type == PickTime.from) {
       setState(() {
-      _startTimeController.text = DateFormat.Hm().format(timeDate);
+        _startTimeController.text = DateFormat.Hm().format(timeDate);
         _startTime = timeDate;
       });
     } else {
@@ -113,7 +161,7 @@ class _CreateEditMatchModalState extends State<CreateEditMatchModal> {
             ),
           );
         }
-        if (state is MatchCreated) {
+        if (state is MatchCreated || state is MatchUpdated) {
           Navigator.of(context).pop();
         }
       },
@@ -128,20 +176,21 @@ class _CreateEditMatchModalState extends State<CreateEditMatchModal> {
                 validator: validator.validateName,
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: "Opis"),
-                controller: _descriptionController,
-                validator: validator.validateDescription,
-                keyboardType: TextInputType.multiline,
-                maxLines: 4
-              ),
+                  decoration: InputDecoration(labelText: "Opis"),
+                  controller: _descriptionController,
+                  validator: validator.validateDescription,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: 4),
               Row(
                 children: <Widget>[
                   Expanded(
                     flex: 4,
                     child: TextFormField(
-                      decoration: InputDecoration(labelText: "Hasło"),
+                      decoration: InputDecoration(
+                          labelText: _isCreateMode() ? "Hasło" : "Nowe hasło"),
                       controller: _passwordController,
-                      validator: (value) => validator.validatePassword(value, _showPassword),
+                      validator: (value) =>
+                          validator.validatePassword(value, _showPassword),
                       readOnly: !_showPassword,
                     ),
                   ),
@@ -165,10 +214,17 @@ class _CreateEditMatchModalState extends State<CreateEditMatchModal> {
               SizedBox(
                 width: double.infinity,
                 child: RaisedButton(
-                    onPressed: state is! MatchCreateLoading
-                        ? _onCreateButtonPresses
-                        : null,
-                    child: Text('Stwórz mecz'),
+                    onPressed: () {
+                      if (_isCreateMode() && state is! MatchCreateLoading) {
+                        _onCreateButtonPresses();
+                      }
+                      if (!_isCreateMode() && state is! MatchUpdateLoading) {
+                        _onUpdateButtonPressed();
+                      }
+                      return null;
+                    },
+                    child:
+                        Text(_isCreateMode() ? 'Stwórz mecz' : 'Zapisz mecz'),
                     shape: RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(30.0))),
               ),
@@ -185,22 +241,21 @@ class _CreateEditMatchModalState extends State<CreateEditMatchModal> {
       children: <Widget>[
         Expanded(
           child: TextFormField(
-            controller: _dateController,
-            decoration: InputDecoration(
-              labelText: "Kiedy: ",
-              prefixIcon: Icon(Icons.date_range),
-              hintText: 'Kiedy ma rozgrywać się mecz?',
-              errorText: validator.validateDate(_date),
-              contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-            ),
-            readOnly: true,
-            validator: (value) {
-              if (value == null || value == "") {
-                return "Podaj datę";
-              }
-              return validator.validateDate(_date);
-            }
-          ),
+              controller: _dateController,
+              decoration: InputDecoration(
+                labelText: "Kiedy: ",
+                prefixIcon: Icon(Icons.date_range),
+                hintText: 'Kiedy ma rozgrywać się mecz?',
+                errorText: validator.validateDate(_date),
+                contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+              ),
+              readOnly: true,
+              validator: (value) {
+                if (value == null || value == "") {
+                  return "Podaj datę";
+                }
+                return validator.validateDate(_date);
+              }),
         ),
         FlatButton(
           child: Text("Zmień"),
@@ -253,22 +308,21 @@ class _CreateEditMatchModalState extends State<CreateEditMatchModal> {
       children: <Widget>[
         Expanded(
           child: TextFormField(
-            controller: _endTimeController,
-            decoration: InputDecoration(
-              labelText: "Do której: ",
-              prefixIcon: Icon(Icons.access_time),
-              hintText: 'O której ma się zacząć?',
-              errorText: validator.validateEndTime(_startTime, _endTime),
-              contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-            ),
-            readOnly: true,
-            validator: (value) {
-              if (value == null || value == "") {
-                return "Podaj godzinę";
-              }
-              return validator.validateEndTime(_startTime, _endTime);
-            }
-          ),
+              controller: _endTimeController,
+              decoration: InputDecoration(
+                labelText: "Do której: ",
+                prefixIcon: Icon(Icons.access_time),
+                hintText: 'O której ma się zacząć?',
+                errorText: validator.validateEndTime(_startTime, _endTime),
+                contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+              ),
+              readOnly: true,
+              validator: (value) {
+                if (value == null || value == "") {
+                  return "Podaj godzinę";
+                }
+                return validator.validateEndTime(_startTime, _endTime);
+              }),
         ),
         FlatButton(
           child: Text("Zmień"),
@@ -284,7 +338,6 @@ class _CreateEditMatchModalState extends State<CreateEditMatchModal> {
 
 class CreateEditMatchValidator {
   String validateName(String name) {
-
     if (name.length < 4 || name.length > 20) {
       return "Nazwa powinna mieć od 4 do 20 znaków";
     }
@@ -314,7 +367,6 @@ class CreateEditMatchValidator {
   }
 
   String validateDate(DateTime date) {
-
     var now = DateTime.now();
     now = DateTime(now.year, now.month, now.day);
     if (date.isBefore(now)) {

@@ -84,7 +84,7 @@ class MatchProvider {
   }
 
   Future<void> deleteMatch({@required String matchId, String token}) async {
-    final res = await delete(ApiConfig.instance.apiUri + "/matches/" + matchId);
+    final res = await delete(ApiConfig.instance.apiUri + "/matches/" + matchId, headers: headersWithToken(token: token));
 
     switch(res.statusCode) {
       case 200: {

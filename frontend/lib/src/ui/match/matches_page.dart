@@ -77,6 +77,7 @@ class _MatchesPageState extends State<MatchesPage> {
               }
               if (state is MatchCreated) {
                 BlocProvider.of<MatchBloc>(context).add(MatchFetchByFilter(filter: defaultFilter()));
+                Scaffold.of(context).hideCurrentSnackBar();
                 Scaffold.of(context).showSnackBar(
                   SnackBar(
                     content: Text('${state.message}'),
@@ -84,12 +85,20 @@ class _MatchesPageState extends State<MatchesPage> {
                   ),
                 );
               }
+              if (state is MatchDeleted) {
+                BlocProvider.of<MatchBloc>(context).add(MatchFetchByFilter(filter: defaultFilter()));
+
+                Scaffold.of(context).hideCurrentSnackBar();
+                Scaffold.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("Pomyślnie usunięto mecz"),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              }
             },
             child: BlocBuilder<MatchBloc, MatchState>(
               builder: (context, state) {
-                if (state is MatchInitial) {
-                  BlocProvider.of<MatchBloc>(context).add(MatchFetchByFilter(filter: defaultFilter()));
-                }
                 if (state is MatchLoading) {
                   return Center(
                     child: CircularProgressIndicator(),
@@ -142,7 +151,7 @@ class _MatchesPageState extends State<MatchesPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: SingleChildScrollView(child: CreateEditMatchModal()),
+        child: SingleChildScrollView(child: CreateEditMatchModal(mode: CreateEditMatchMode.create)),
       )
     );
   }

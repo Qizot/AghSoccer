@@ -62,7 +62,17 @@ class MatchCreated extends MatchState {
 
 class MatchDeleted extends MatchState {}
 
-class MatchUpdated extends MatchState {}
+class MatchUpdated extends MatchState {
+  final String matchId;
+
+  MatchUpdated({this.matchId});
+
+  @override
+  List<Object> get props => [matchId];
+
+  @override
+  String toString() => 'MatchUpdated { matchId: $matchId}';
+}
 
 class MatchFailure extends MatchState {
   final String error;

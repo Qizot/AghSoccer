@@ -63,7 +63,7 @@ class MatchBloc extends Bloc<MatchEvent, MatchState> {
       
       try {
         await matchRepository.updateMatch(matchId: event.matchId, match: event.match);
-        yield MatchUpdated();
+        yield MatchUpdated(matchId: event.matchId);
       } catch (error) {
         yield MatchFailure(error: parseError(error.toString()));
       }

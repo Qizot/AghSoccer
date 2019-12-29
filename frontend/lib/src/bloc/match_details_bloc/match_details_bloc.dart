@@ -15,6 +15,7 @@ class MatchDetailsBloc extends Bloc<MatchDetailsEvent, MatchDetailsState> {
   final MatchRepository matchRepository;
   final UserRepository userRepository;
   final BehaviorSubject<bool> isUserEnrolled$ = new BehaviorSubject<bool>();
+  final BehaviorSubject<bool> isUserOwner$ = new BehaviorSubject<bool>();
   User _user;
   String matchId;
 
@@ -52,6 +53,7 @@ class MatchDetailsBloc extends Bloc<MatchDetailsEvent, MatchDetailsState> {
         final match = await matchRepository.getMatch(matchId: matchId);
         _user = await userRepository.getProfile();
         checkUserEnrollment(match);
+        isUserOwner$.add(_user.sId == match.ownerId);
 
         yield MatchDetailsRefreshed(match: match);
       } catch (error) {
@@ -113,6 +115,7 @@ class MatchDetailsBloc extends Bloc<MatchDetailsEvent, MatchDetailsState> {
 
   void dispose() {
     isUserEnrolled$.close();
+    isUserOwner$.close();
   }
 
 }
