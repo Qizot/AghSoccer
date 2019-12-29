@@ -90,9 +90,29 @@ class MatchDetailsModal extends StatelessWidget {
             centerTitle: true,
             title: Text("Edycja meczu")
         ),
-        body: Padding(
-          padding: const EdgeInsets.only(top: 15.0, left: 15.0, right: 15.0),
-          child: SingleChildScrollView(child: CreateEditMatchModal(match: match, mode: CreateEditMatchMode.edit)),
+        body: Container(
+          height: double.infinity,
+          decoration: BoxDecoration(
+            // Box decoration takes a gradient
+            gradient: LinearGradient(
+              // Where the linear gradient begins and ends
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              // Add one stop for each color. Stops should increase from 0 to 1
+              stops: [0.1, 0.2, 0.5, 0.9],
+              colors: [
+                // Colors are easy thanks to Flutter's Colors class.
+                Colors.black,
+                Colors.black87,
+                Colors.black54,
+                Colors.black38,
+              ],
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 15.0, left: 15.0, right: 15.0),
+            child: SingleChildScrollView(child: CreateEditMatchModal(match: match, mode: CreateEditMatchMode.edit)),
+          ),
         )
     );
   }

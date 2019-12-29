@@ -16,10 +16,8 @@ class CreateEditMatchModal extends StatefulWidget {
   Match _match;
   CreateEditMatchMode _mode;
 
-  CreateEditMatchModal({
-    Match match,
-    CreateEditMatchMode mode = CreateEditMatchMode.create
-  }) {
+  CreateEditMatchModal(
+      {Match match, CreateEditMatchMode mode = CreateEditMatchMode.create}) {
     _mode = mode;
     if (mode == CreateEditMatchMode.edit) {
       assert(match != null);
@@ -182,8 +180,7 @@ class _CreateEditMatchModalState extends State<CreateEditMatchModal> {
                   controller: _descriptionController,
                   validator: validator.validateDescription,
                   keyboardType: TextInputType.multiline,
-                  maxLines: 4
-              ),
+                  maxLines: 4),
               _passwordField(),
               _dateField(),
               _startTimeField(),
@@ -214,49 +211,56 @@ class _CreateEditMatchModalState extends State<CreateEditMatchModal> {
     );
   }
 
-
   // if it is create mode simply return password field
   // if we are in edit mode, ask whether to change password, if yes then display password field
   Widget _passwordField() {
     return Column(
       children: <Widget>[
-        !_isCreateMode() ? Row(
-          children: <Widget>[
-            Text("Zmień hasło", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
-            Switch(
-              value: _changePassword,
-              onChanged: (value) => setState(() { _changePassword = value; }),
-            )
-          ],
-        ) : Container(),
-        (!_isCreateMode() && _changePassword) || _isCreateMode() ? Row(
-          children: <Widget>[
-            Expanded(
-              flex: 4,
-              child: TextFormField(
-                decoration: InputDecoration(
-                    labelText: _isCreateMode() ? "Hasło" : "Nowe hasło"),
-                controller: _passwordController,
-                validator: (value) =>
-                    validator.validatePassword(value, _showPassword),
-                readOnly: !_showPassword,
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Checkbox(
-                value: _showPassword,
-                onChanged: (value) {
-                  setState(() {
-                    _showPassword = value;
-                  });
-                },
-              ),
-            )
-          ],
-        ) : Container()
+        !_isCreateMode()
+            ? Row(
+                children: <Widget>[
+                  Text("Zmień hasło",
+                      style:
+                          TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
+                  Switch(
+                    value: _changePassword,
+                    onChanged: (value) => setState(() {
+                      _changePassword = value;
+                    }),
+                  )
+                ],
+              )
+            : Container(),
+        (!_isCreateMode() && _changePassword) || _isCreateMode()
+            ? _setPasswordField()
+            : Container()
       ],
     );
+  }
+
+  Widget _setPasswordField() {
+    return Column(children: <Widget>[
+      Row(children: <Widget>[
+        Text("Ustaw hasło",
+            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
+        Switch(
+          value: _showPassword,
+          onChanged: (value) => setState(() {
+            _showPassword = value;
+          }),
+        )
+      ]),
+      _showPassword
+          ? TextFormField(
+              decoration: InputDecoration(
+                  labelText: _isCreateMode() ? "Hasło" : "Nowe hasło"),
+              controller: _passwordController,
+              validator: (value) =>
+                  validator.validatePassword(value, _showPassword),
+              readOnly: !_showPassword,
+            )
+          : Container()
+    ]);
   }
 
   Widget _dateField() {
@@ -311,7 +315,7 @@ class _CreateEditMatchModalState extends State<CreateEditMatchModal> {
               if (value == null || value == "") {
                 return "Podaj godzinę";
               }
-              return validator.validateStartTime(_startTime);
+              return validator.validateStartTime(_combineDateWithTime(_date, _startTime));
             },
           ),
         ),
@@ -402,6 +406,9 @@ class CreateEditMatchValidator {
   String validateStartTime(DateTime start) {
     if (start == null) {
       return "Podaj godzinę";
+    }
+    if (start.isBefore(DateTime.now())) {
+      return "Czas nie może być w przeszłości";
     }
     return null;
   }

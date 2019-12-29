@@ -37,7 +37,9 @@ class MatchFetchedByFilter extends MatchState {
   final List<Match> matches;
   final String name;
 
-  MatchFetchedByFilter({this.matches, this.name});
+  MatchFetchedByFilter({this.matches, this.name}) {
+    this.matches.sort((a, b) => a.startTime.compareTo(b.startTime));
+  }
 
   @override
   List<Object> get props => matches;
