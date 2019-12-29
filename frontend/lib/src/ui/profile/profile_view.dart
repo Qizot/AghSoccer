@@ -1,9 +1,6 @@
-import 'package:agh_soccer/src/bloc/profile_bloc/profile_bloc.dart';
-import 'package:agh_soccer/src/bloc/profile_bloc/profile_event.dart';
 import 'package:agh_soccer/src/models/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfileView extends StatelessWidget {
   final User user;
@@ -14,6 +11,18 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.transparent,
+            image: DecorationImage(
+              fit: BoxFit.fill,
+              image: AssetImage(
+                'assets/billy.jpeg',
+              ),
+            ),
+          ),
+          height: 300.0,
+        ),
         SizedBox(
           width: double.infinity,
           child: Container(
@@ -26,7 +35,6 @@ class ProfileView extends StatelessWidget {
             ),
           ),
         ),
-        deleteAccountButton(context),
       ],
     );
   }
@@ -57,47 +65,6 @@ class ProfileView extends StatelessWidget {
 
         )
       ],
-    );
-  }
-
-  Widget deleteAccountButton(context) {
-    return RaisedButton(
-        onPressed: () => showAlertDialog(context),
-        child: Text('Usuń konto'),
-        color: Colors.red,
-        shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
-    );
-  }
-
-  showAlertDialog(BuildContext context) {
-    // set up the buttons
-    Widget cancelButton = FlatButton(
-      child: Text("Anuluj"),
-      onPressed:  () => Navigator.of(context).pop(),
-    );
-    Widget continueButton = FlatButton(
-      child: Text("Usuń"),
-      color: Colors.red,
-      onPressed:  () {
-        BlocProvider.of<ProfileBloc>(context).add(ProfileDelete());
-        Navigator.of(context).pushNamedAndRemoveUntil("/login", ModalRoute.withName("/home"));
-      }
-    );
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("Czy na pewno chcesz usunąć konto?"),
-      content: Text("Operacji tej nie da się anulować przez co bezpowrotnie stracisz swoje dotychczasowe konto."),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
     );
   }
 }
