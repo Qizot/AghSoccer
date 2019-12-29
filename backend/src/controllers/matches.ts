@@ -41,7 +41,7 @@ export const createMatch = (req: Request, res: Response) => {
 
 export const editMatch = (req: Request, res: Response) => {
     const data = req.body;
-    const {name, description, password, startTime, endTime} = data;
+    const {name, description, password, startTime, endTime, changePassword} = data;
     const matchId = req.params.matchId;
     const {id} = req.user;
 
@@ -60,6 +60,7 @@ export const editMatch = (req: Request, res: Response) => {
     MatchService.editMatch({id}, matchId, {
         name,
         description,
+        changePassword,
         password,
         startTime: startTime && new Date(startTime),
         endTime: endTime && new Date(endTime),

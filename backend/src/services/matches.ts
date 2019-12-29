@@ -8,6 +8,7 @@ interface EditMatch {
     password: string;
     startTime: Date;
     endTime: Date;
+    changePassword: boolean;
 }
 
 interface MatchFilter {
@@ -73,7 +74,9 @@ const editMatch = async (owner: MatchOwner, matchId: string,  editMatch: Partial
         if (editMatch.description) { match.description = editMatch.description; }
         if (editMatch.startTime) { match.startTime = editMatch.startTime; }
         if (editMatch.endTime) { match.endTime = editMatch.endTime; }
-        if (editMatch.password) { match.password = editMatch.password; }
+        if (editMatch.changePassword) {
+            match.password = editMatch.password;
+        }
 
         await match.save();
         return {success: true, message: "match has been updated"};

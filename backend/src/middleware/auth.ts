@@ -8,6 +8,8 @@ export const validateToken = async (req, res, next) => {
     if (token && token.startsWith("Bearer ")) {
       token = token.slice(7, token.length);
     } else {
+        console.log(token);
+        
         return res.status(400).json({
             success: false,
             message: "invalid token format",
