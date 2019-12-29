@@ -91,7 +91,7 @@ class MatchDetailsModal extends StatelessWidget {
             title: Text("Edycja meczu")
         ),
         body: Padding(
-          padding: const EdgeInsets.all(15.0),
+          padding: const EdgeInsets.only(top: 15.0, left: 15.0, right: 15.0),
           child: SingleChildScrollView(child: CreateEditMatchModal(match: match, mode: CreateEditMatchMode.edit)),
         )
     );

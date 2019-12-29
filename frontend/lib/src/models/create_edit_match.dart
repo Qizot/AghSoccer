@@ -6,6 +6,7 @@ class CreateEditMatch extends Equatable {
   final String password;
   final DateTime startTime;
   final DateTime endTime;
+  final bool changePassword;
 
   CreateEditMatch({
     this.name,
@@ -13,6 +14,7 @@ class CreateEditMatch extends Equatable {
     this.password,
     this.startTime,
     this.endTime,
+    this.changePassword = true,
   });
 
   factory CreateEditMatch.fromJson(Map<String, dynamic> json) {
@@ -29,13 +31,16 @@ class CreateEditMatch extends Equatable {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['name'] = this.name;
     data['description'] = this.description;
-    data['password'] = this.password;
+    data['changePassword'] = this.changePassword;
+    if (changePassword) {
+      data['password'] = this.password;
+    }
     data['startTime'] = this.startTime.toIso8601String();
     data['endTime'] = this.endTime.toIso8601String();
     return data;
   }
 
   @override
-  List<Object> get props => [name, description, password, startTime, endTime];
+  List<Object> get props => [name, description, password, startTime, endTime, changePassword];
 }
 

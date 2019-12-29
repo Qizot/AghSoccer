@@ -72,8 +72,9 @@ class MatchUpdate extends MatchEvent {
     @required String description,
     @required String password,
     @required DateTime startTime,
-    @required DateTime endTime
-  }) : match = CreateEditMatch(name: name, description: description, password: password, startTime: startTime, endTime: endTime), matchId = matchId;
+    @required DateTime endTime,
+    bool changePassword
+  }) : match = CreateEditMatch(name: name, description: description, password: password, startTime: startTime, endTime: endTime, changePassword: changePassword), matchId = matchId;
 
   @override
   List<Object> get props => match.props..insert(0, matchId);
