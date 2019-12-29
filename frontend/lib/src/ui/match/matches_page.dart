@@ -111,7 +111,7 @@ class _MatchesPageState extends State<MatchesPage> {
                 return RefreshIndicator(
                   child: _matchesList(),
                   onRefresh: () async  {
-                    BlocProvider.of<MatchBloc>(context).add(MatchFetchByFilter(filter: defaultFilter()));
+                    BlocProvider.of<MatchBloc>(context).add(MatchFetchByFilter(filter: currentFilter));
                     return null;
                   },
                 );
