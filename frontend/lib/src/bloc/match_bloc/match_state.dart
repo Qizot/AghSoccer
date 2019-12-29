@@ -1,4 +1,5 @@
 import 'package:agh_soccer/src/models/match.dart';
+import 'package:agh_soccer/src/models/match_filter.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
@@ -34,10 +35,11 @@ class MatchFetchedById extends MatchState {
 }
 
 class MatchFetchedByFilter extends MatchState {
+  final MatchFilter filter;
   final List<Match> matches;
   final String name;
 
-  MatchFetchedByFilter({this.matches, this.name}) {
+  MatchFetchedByFilter({this.matches, this.name, this.filter}) {
     this.matches.sort((a, b) => a.startTime.compareTo(b.startTime));
   }
 

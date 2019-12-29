@@ -20,8 +20,11 @@ class _MatchesPageState extends State<MatchesPage> {
 
   List<Match> _matches = [];
 
+  MatchFilter currentFilter;
+
   @override
   void initState() {
+    currentFilter = defaultFilter();
     BlocProvider.of<MatchBloc>(context).add(MatchFetchByFilter(filter: defaultFilter()));
     super.initState();
   }
@@ -32,7 +35,7 @@ class _MatchesPageState extends State<MatchesPage> {
         context: context,
         builder: (context) {
           return BlocBuilder<MatchBloc, MatchState>(
-            builder: (context, _) => SearchMatches(bloc: bloc)
+            builder: (context, _) => SearchMatches(bloc: bloc, filter: currentFilter)
           );
         },
         shape: RoundedRectangleBorder(
@@ -44,11 +47,11 @@ class _MatchesPageState extends State<MatchesPage> {
 
   MatchFilter defaultFilter() {
     final now = DateTime.now();
-    final midnight = DateTime(now.year, now.month, now.day, 0,0,0);
+    final midnight = DateTime(now.year, now.month, now.day, 8,0,0);
     return MatchFilter(
       showPrivate: true,
       timeFrom: midnight,
-      timeTo: midnight.add(Duration(days: 14))
+      timeTo: midnight.add(Duration(days: 14, hours: 15))
     );
   }
 
@@ -70,6 +73,7 @@ class _MatchesPageState extends State<MatchesPage> {
               if (state is MatchFetchedByFilter) {
                 setState(() {
                   _matches = state.matches;
+                  currentFilter = state.filter;
                 });
               }
               if (state is MatchInitial) {

@@ -7,8 +7,8 @@ import 'package:intl/intl.dart';
 
 class SearchMatches extends StatefulWidget {
   final MatchBloc bloc;
-
-  SearchMatches({this.bloc});
+  final MatchFilter initialFilter;
+  SearchMatches({this.bloc, @required MatchFilter filter}) : initialFilter = filter;
 
   State<SearchMatches> createState() => _SearchMatchesState();
 }
@@ -17,17 +17,19 @@ enum SearchMatchTime { from, to }
 
 class _SearchMatchesState extends State<SearchMatches> {
   final _nameController = new TextEditingController();
-  DateTime _date;
+  DateTime _dateFrom;
+  DateTime _dateTo;
   TimeOfDay _timeFrom;
   TimeOfDay _timeTo;
 
   @override
   void initState() {
     super.initState();
-    _date = DateTime.now();
+    _dateFrom = widget.initialFilter.timeFrom;
+    _dateTo = widget.initialFilter.timeTo;
     final timeNow = TimeOfDay.now();
-    _timeFrom = timeNow.replacing(hour: timeNow.hour, minute: 0);
-    _timeTo = timeNow.replacing(hour: 23, minute: 0);
+    _timeFrom = timeNow.replacing(hour: _dateFrom.hour, minute: _dateFrom.minute);
+    _timeTo = timeNow.replacing(hour: _dateTo.hour, minute: _dateTo.minute);
     setState(() {
 
     });
@@ -50,7 +52,7 @@ class _SearchMatchesState extends State<SearchMatches> {
     }
   }
 
-  Future<void> selectDate(BuildContext context) async {
+  Future<void> selectDate(BuildContext context, SearchMatchTime type) async {
     final date = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
@@ -60,17 +62,21 @@ class _SearchMatchesState extends State<SearchMatches> {
     );
     setState(() {
       if (date != null) {
-        _date = date;
+        if (type == SearchMatchTime.from) {
+          _dateFrom = date;
+        } else {
+          _dateTo = date;
+        }
       }
     });
   }
 
-  DateTime timeToDate(TimeOfDay time) {
-    if (_date == null) {
-      _date = DateTime.now();
+  DateTime timeToDate(DateTime date, TimeOfDay time) {
+    if (date == null) {
+      date = DateTime.now();
     }
     return DateTime(
-        _date.year, _date.month, _date.day, time.hour, time.minute);
+        date.year, date.month, date.day, time.hour, time.minute);
   }
 
   String timeToString(TimeOfDay t) {
@@ -83,15 +89,23 @@ class _SearchMatchesState extends State<SearchMatches> {
       MatchFetchByFilter(
           name: _nameController.text,
           filter: MatchFilter(
-            timeFrom: timeToDate(_timeFrom),
-            timeTo: timeToDate(_timeTo),
+            timeFrom: timeToDate(_dateFrom, _timeFrom),
+            timeTo: timeToDate(_dateTo, _timeTo),
             showPrivate: true
           )
       )
   );
 
-  void _clear() {
 
+  void _clear() {
+    final now = DateTime.now();
+    final midnight = DateTime(now.year, now.month, now.day, 0,0,0);
+    setState(() {
+      _dateFrom = midnight;
+      _dateTo = midnight.add(Duration(days: 14));
+      _timeFrom = TimeOfDay(hour: 8, minute: 0);
+      _timeTo = TimeOfDay(hour: 23, minute: 0);
+    });
   }
 
   final topBarTextStyle = TextStyle(
@@ -105,7 +119,9 @@ class _SearchMatchesState extends State<SearchMatches> {
           children: <Widget>[
             _filterHeader(context),
             Divider(),
-            _chooseDate(context),
+            _chooseDate(context, SearchMatchTime.from),
+            Divider(),
+            _chooseDate(context, SearchMatchTime.to),
             Divider(),
             _chooseTime(context, "Od godziny: ", SearchMatchTime.from),
             Divider(),
@@ -134,7 +150,10 @@ class _SearchMatchesState extends State<SearchMatches> {
           ),
         ),
         FlatButton(
-          onPressed: () => _search(context),
+          onPressed: () {
+            _search(context);
+            Navigator.of(context).pop();
+          },
           child: Text(
               "Szukaj",
               style: topBarTextStyle
@@ -144,27 +163,31 @@ class _SearchMatchesState extends State<SearchMatches> {
     );
   }
 
-  Widget _chooseDate(context) {
+  Widget _chooseDate(BuildContext context, SearchMatchTime type) {
     initializeDateFormatting();
+
+    final title = type == SearchMatchTime.from ? "Od dnia: " : "Do dnia: ";
+    final date = type == SearchMatchTime.from ? _dateFrom : _dateTo;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Row(
           children: <Widget>[
-            Text("Dzień: "),
+            Text(title),
             SizedBox(width: 20.0),
             Icon(
               Icons.date_range,
               size: 18.0,
             ),
-            Text(DateFormat.yMMMMd("pl_PL").format(_date))
+            Text(DateFormat.yMMMMd("pl_PL").format(date))
 
           ],
         ),
         FlatButton(
           child: Text("Zmień"),
           onPressed: () async {
-            await selectDate(context);
+            await selectDate(context, type);
           },
         ),
       ],
