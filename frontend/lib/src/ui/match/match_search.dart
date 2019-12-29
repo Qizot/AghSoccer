@@ -139,8 +139,10 @@ class _SearchMatchesState extends State<SearchMatches> {
             onPressed: _clear,
             child: Text(
               "Wyczyść",
-              style: topBarTextStyle,
-            )
+              style: TextStyle(
+                color: Colors.red.withOpacity(0.7),
+              ),
+            ),
         ),
         Text(
           "Filter",
@@ -155,8 +157,10 @@ class _SearchMatchesState extends State<SearchMatches> {
             Navigator.of(context).pop();
           },
           child: Text(
-              "Szukaj",
-              style: topBarTextStyle
+            "Szukaj",
+            style: TextStyle(
+              color: Colors.amber,
+            ),
           ),
         )
       ],
