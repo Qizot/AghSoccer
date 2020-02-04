@@ -35,7 +35,7 @@ void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
   final userRepository = UserRepository();
 
-  ApiConfig(apiUri: "http://192.168.70.94:8080/api");
+  ApiConfig(apiUri: "http://192.168.0.100:8080/api");
 
   runApp(
       MultiBlocProvider(
