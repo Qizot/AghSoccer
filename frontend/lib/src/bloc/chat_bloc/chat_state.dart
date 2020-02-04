@@ -22,7 +22,7 @@ class ChatSingleMessage extends ChatState {
   List<Object> get props => [message.nickname, message.message, message.timestamp];
 
   @override
-  String toString() => "ChatSingleMessage { message: $message }";
+  String toString() => "ChatSingleMessage { }";
 }
 
 class ChatFetchedMessages extends ChatState {
@@ -34,7 +34,7 @@ class ChatFetchedMessages extends ChatState {
   List<Object> get props => [messages];
 
   @override
-  String toString() => "ChatFetchedMessages { messages: $messages }";
+  String toString() => "ChatFetchedMessages { }";
 }
 
 class ChatError extends ChatState {

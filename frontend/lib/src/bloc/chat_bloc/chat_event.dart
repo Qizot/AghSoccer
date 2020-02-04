@@ -14,15 +14,14 @@ abstract class ChatEvent extends Equatable {
 class ChatConnect extends ChatEvent {
   final String url;
   final String matchId;
-  final String token;
 
-  ChatConnect({this.url, this.token, this.matchId});
-
-  @override
-  List<Object> get props => [url, token, matchId];
+  ChatConnect({this.url, this.matchId});
 
   @override
-  String toString() => 'ChatConnect { url: $url, token: $token, matchId: $matchId }';
+  List<Object> get props => [url, matchId];
+
+  @override
+  String toString() => 'ChatConnect { url: $url, matchId: $matchId }';
 }
 
 class ChatDisconnect extends ChatEvent {
@@ -91,6 +90,6 @@ class ChatIncomingMessagesList extends ChatIncoming {
   List<Object> get props => [messages];
 
   @override
-  String toString() => 'ChatIncomingMessagesList { messages: $messages }';
+  String toString() => 'ChatIncomingMessagesList { }';
 }
 

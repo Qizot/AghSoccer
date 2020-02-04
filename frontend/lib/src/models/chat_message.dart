@@ -18,4 +18,6 @@ class ChatMessage {
     data['message'] = this.message;
     return data;
   }
+
+  
 }

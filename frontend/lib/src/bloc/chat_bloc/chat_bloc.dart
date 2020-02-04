@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:agh_soccer/src/bloc/chat_bloc/chat_event.dart';
 import 'package:agh_soccer/src/bloc/chat_bloc/chat_state.dart';
 import 'package:agh_soccer/src/models/chat_message.dart';
+import 'package:agh_soccer/src/resources/user_repository.dart';
 import 'dart:core';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:bloc/bloc.dart';
@@ -17,7 +18,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   @override
   Stream<ChatState> mapEventToState(ChatEvent event) async* {
     if (event is ChatConnect && socket == null) {
-      socket = IO.io('${event.url}/${event.matchId}?token=${event.token}', <String, dynamic>{
+      final token = await UserRepository().getToken();
+      
+      socket = IO.io('${event.url}/${event.matchId}?token=$token', <String, dynamic>{
         'transports': ['websocket']
       });
 
@@ -69,6 +72,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   Stream<ChatState> _mapIncomingEvents(ChatIncoming event) async* {
     if (event is ChatIncomingConnect) {
       yield ChatConnected();
+      add(ChatFetchMessages());
     }
 
     if (event is ChatIncomingDisconnect) {
@@ -81,8 +85,16 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
 
     if (event is ChatIncomingMessagesList) {
-      List jsonList = json.decode(event.messages.toString());
-      yield ChatFetchedMessages(messages: jsonList.map((m) => new ChatMessage.fromJson(m)).toList());
+      List<ChatMessage> messages = [];
+      for (var message in event.messages) {
+        ChatMessage msg = ChatMessage.fromJson(message);
+        messages.add(msg);
+      }
+      // List<ChatMessage> messages = event.messages.map((m) => ChatMessage.fromJson(m)).toList();
+      messages.sort((a, b) {
+        return b.timestamp.compareTo(a.timestamp);
+      });
+      yield ChatFetchedMessages(messages: messages);
     }
     if (event is ChatIncomingError) {
       yield ChatError(error: event.error);

@@ -5,6 +5,7 @@ import 'package:agh_soccer/src/bloc/match_details_bloc/bloc.dart';
 import 'package:agh_soccer/src/models/match.dart';
 import 'package:agh_soccer/src/resources/match_repository.dart';
 import 'package:agh_soccer/src/resources/user_repository.dart';
+import 'package:agh_soccer/src/ui/match/match_details/chat/chat_view.dart';
 import 'package:agh_soccer/src/ui/match/match_details/match_details_modal.dart';
 
 import 'package:flutter/material.dart';
@@ -60,6 +61,7 @@ class _MatchDetailsState extends State<MatchDetails> {
             )
           ],
         ),
+        floatingActionButton: _floatingButton(context),
         body: BlocListener<MatchBloc, MatchState>(
           listener: (context, state) {
             if (state is MatchUpdated && state.matchId == widget.matchId) {
@@ -136,6 +138,21 @@ class _MatchDetailsState extends State<MatchDetails> {
           }
           return Container();
         });
+  }
+
+  Widget _floatingButton(context) {
+    return FloatingActionButton(
+      onPressed: () {
+        Navigator.push(context, MaterialPageRoute(
+            builder: (BuildContext context) {
+              return ChatPage(matchId: widget.matchId);
+            },
+            fullscreenDialog: true,
+        ));
+      },
+      child: Icon(Icons.message, color: Colors.white),
+      backgroundColor: Colors.blue,
+    );
   }
 
   Widget _mainLayout(context) {
