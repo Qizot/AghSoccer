@@ -1,5 +1,4 @@
-import 'package:agh_soccer/src/bloc/auth_bloc/auth_bloc.dart';
-import 'package:agh_soccer/src/bloc/auth_bloc/auth_event.dart';
+import 'package:agh_soccer/src/bloc/auth_bloc/bloc.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';

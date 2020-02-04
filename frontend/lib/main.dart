@@ -1,14 +1,13 @@
-import 'package:agh_soccer/src/bloc/auth_bloc/auth_bloc.dart';
-import 'package:agh_soccer/src/bloc/auth_bloc/auth_event.dart';
+import 'package:agh_soccer/src/bloc/auth_bloc/bloc.dart';
 import 'package:agh_soccer/src/bloc/match_bloc/match_bloc.dart';
 import 'package:agh_soccer/src/config/api_config.dart';
 import 'package:agh_soccer/src/resources/match_repository.dart';
 import 'package:agh_soccer/src/resources/user_repository.dart';
-import 'package:flutter/material.dart';
 import 'package:agh_soccer/src/app.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/material.dart';
 
 
 class SimpleBlocDelegate extends BlocDelegate {
@@ -35,7 +34,7 @@ void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
   final userRepository = UserRepository();
 
-  ApiConfig(apiUri: "http://192.168.0.100:8080/api");
+  ApiConfig(apiUri: "http://192.168.0.100:8080/api", chatUri: "http://192.168.0.100:8080");
 
   runApp(
       MultiBlocProvider(

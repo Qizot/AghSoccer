@@ -91,8 +91,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   @override
   Future<void> close() async {
-    socket.close();
-    socket.destroy();
+    socket?.close();
+    socket?.destroy();
     await super.close();
   }
 }

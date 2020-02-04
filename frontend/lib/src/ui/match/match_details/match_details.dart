@@ -1,14 +1,12 @@
 import 'dart:async';
 
-import 'package:agh_soccer/src/bloc/match_bloc/match_bloc.dart';
-import 'package:agh_soccer/src/bloc/match_bloc/match_state.dart';
-import 'package:agh_soccer/src/bloc/match_details_bloc/match_details_bloc.dart';
-import 'package:agh_soccer/src/bloc/match_details_bloc/match_details_event.dart';
-import 'package:agh_soccer/src/bloc/match_details_bloc/match_details_state.dart';
+import 'package:agh_soccer/src/bloc/match_bloc/bloc.dart';
+import 'package:agh_soccer/src/bloc/match_details_bloc/bloc.dart';
 import 'package:agh_soccer/src/models/match.dart';
 import 'package:agh_soccer/src/resources/match_repository.dart';
 import 'package:agh_soccer/src/resources/user_repository.dart';
-import 'package:agh_soccer/src/ui/match/match_details_modal.dart';
+import 'package:agh_soccer/src/ui/match/match_details/match_details_modal.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/date_symbol_data_local.dart';

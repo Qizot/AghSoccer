@@ -1,5 +1,4 @@
-import 'package:agh_soccer/src/bloc/match_bloc/match_event.dart';
-import 'package:agh_soccer/src/bloc/match_bloc/match_bloc.dart';
+import 'package:agh_soccer/src/bloc/match_bloc/bloc.dart';
 import 'package:agh_soccer/src/models/match_filter.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';

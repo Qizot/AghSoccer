@@ -1,7 +1,5 @@
 
-import 'package:agh_soccer/src/bloc/register_bloc/register_event.dart';
-import 'package:agh_soccer/src/bloc/register_bloc/register_bloc.dart';
-import 'package:agh_soccer/src/bloc/register_bloc/register_state.dart';
+import 'package:agh_soccer/src/bloc/register_bloc/bloc.dart';
 import 'package:agh_soccer/src/utilities/validators.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

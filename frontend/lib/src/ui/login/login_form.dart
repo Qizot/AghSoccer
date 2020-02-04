@@ -1,6 +1,4 @@
-import 'package:agh_soccer/src/bloc/login_bloc/login_bloc.dart';
-import 'package:agh_soccer/src/bloc/login_bloc/login_event.dart';
-import 'package:agh_soccer/src/bloc/login_bloc/login_state.dart';
+import 'package:agh_soccer/src/bloc/login_bloc/bloc.dart';
 import 'package:agh_soccer/src/ui/register/register_page.dart';
 import 'package:agh_soccer/src/utilities/fade_route.dart';
 import 'package:flutter/material.dart';
