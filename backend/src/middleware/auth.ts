@@ -2,18 +2,32 @@
 import jwt from "jsonwebtoken";
 import { config } from "../config/config";
 import { UserModel } from "../models/user";
+import { Request, Response, NextFunction } from "express";
 
-export const validateToken = async (req, res, next) => {
-    let token = req.headers["x-access-token"] || req.headers.authorization;
-    if (token && token.startsWith("Bearer ")) {
-      token = token.slice(7, token.length);
-    } else {
-        console.log(token);
-        
-        return res.status(400).json({
-            success: false,
-            message: "invalid token format",
-        });
+export enum TokenResult {
+    Success = "user has been authenticated",
+    InvalidFormat = "invalid token format",
+    InvalidToken = "token is invalid",
+    UserNotFound = "user has not been found",
+    ExpiredToken = "token is too old",
+    DatabaseError = "internal error while fetching user"
+}
+
+interface UserInfo {
+    id: string;
+    nickname: string;
+    roles: string[];
+}
+type CheckTokenResult = ({token, omitFormatCheck}: {token: string; omitFormatCheck?: boolean}) => Promise<{status: TokenResult; user?: UserInfo}>;
+
+export const checkToken: CheckTokenResult = async ({token, omitFormatCheck = false}) => {
+    let tkn = token;
+    if (!omitFormatCheck) {
+        if (token && token.startsWith("Bearer ")) {
+            token = token.slice(7, token.length);
+        } else {
+            return {status: TokenResult.InvalidFormat};
+        }
     }
 
     let userId: string;
@@ -21,39 +35,65 @@ export const validateToken = async (req, res, next) => {
         const {id} = jwt.verify(token, config.jwtSecret) as {id: string};
         userId = id;
     } catch (err) {
-        return res.status(401).json({
-            success: false,
-            message: "token is invalid",
-        });
+        return {status: TokenResult.InvalidToken};
     }
 
     let user;
     try {
-        user = await UserModel.findOne({_id: userId}, {"_id": 1, "roles": 1, "credentials.tokenInfo.token": 1});
+        user = await UserModel.findOne({_id: userId}, {"_id": 1, "roles": 1, "nickname": 1, "credentials.tokenInfo.token": 1});
         if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: "user has not been found",
-            });
+            return {status: TokenResult.UserNotFound};
         }
         if (user.credentials.tokenInfo.token !== token) {
-            return res.status(401).json({
-                success: false,
-                message: "token is too old",
-            });
+            return {status: TokenResult.ExpiredToken}
         }
     } catch (err) {
-        return res.status(500).json({
-            success: false,
-            message: "internal error while fetching user",
-        });
+        return {status: TokenResult.DatabaseError};
     }
-    req.user = {id: user._id, roles: user.roles};
-    next();
+
+    return {
+        status: TokenResult.Success, 
+        user: {
+            id: user._id,
+            nickname: user.nickname,
+            roles: user.roles
+        }
+    };
+}
+
+export const validateToken = async (req: Request, res: Response, next: NextFunction) => {
+    let token = req.headers.authorization;
+
+    const { status, user } = await checkToken({token});
+
+    // error message when status is different to Success
+    const errorMessage = {status: false, message: status};
+
+    switch (status) {
+        case TokenResult.InvalidFormat: {
+            return res.status(400).json(errorMessage);
+        }
+        case TokenResult.InvalidToken: {
+            return res.status(401).json(errorMessage);
+        }
+        case TokenResult.UserNotFound: {
+            return res.status(404).json(errorMessage);
+        }
+        case TokenResult.ExpiredToken: {
+            return res.status(401).json(errorMessage);
+        }
+        case TokenResult.DatabaseError: {
+            return res.status(500).json(errorMessage);
+        }
+        case TokenResult.Success: {
+            req.user = {...user};
+            next();
+        }
+    }
 };
 
 export const hasRole = (role: string) => {
-    return function(req, res, next) {
+    return function(req: Request, res: Response, next: NextFunction) {
         const user = req.user;
         if (!user) {
             return res.status(500).json({

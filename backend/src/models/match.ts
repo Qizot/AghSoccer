@@ -1,6 +1,7 @@
 import moment from "moment";
 import mongoose, {Schema} from "mongoose";
 import { RepositoryBase } from "./model_base";
+import { isNullOrUndefined } from "util";
 
 const validateDates = (dates: {start: Date, end: Date}) => {
     const {start, end} = dates;
@@ -221,6 +222,11 @@ export class MatchModel {
                 resolve(item);
             });
         });
+    }
+
+    public static async isUserMatchMember(matchId: string, nickname: string): Promise<boolean> {
+        const match = await MatchSchema.findOne({_id: matchId, players: nickname});
+        return !isNullOrUndefined(match);
     }
 
 }

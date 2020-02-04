@@ -1,6 +1,7 @@
 import { CreateMatchType, MatchModel, MatchModelType, MatchRepository, PlainMatch } from "../models/match";
 import { ServiceMessage, ServiceMessageError } from "./service_message";
 import { UserModel, UserModelType } from "../models/user";
+import { ChatRoom } from "../models/chat";
 
 interface EditMatch {
     name: string;
@@ -58,6 +59,9 @@ const getUserNickname = async (userId: string) => {
 const createMatch = async (owner: MatchOwner, match: CreateMatchType) => {
     try {
         const createdMatch = await MatchModel.createMatch({...match, ownerId: owner.id}) as MatchModelType;
+        // create chat rooom
+        const chatRoom = await ChatRoom.createRoom(createdMatch._id);
+
         return {success: true, message: "match has been created", data: new MatchModel(createdMatch).plainMatch};
     } catch (err) {
         if (err instanceof ServiceMessageError) { throw err; }
@@ -90,7 +94,10 @@ const editMatch = async (owner: MatchOwner, matchId: string,  editMatch: Partial
 const deleteMatch = async (owner: MatchOwner, matchId: string) => {
     try {
         const match = await getOwnersMatch(owner, matchId);
+        const chatRoom = await ChatRoom.findRoom({matchId: match._id});
 
+        // delete chat room
+        await chatRoom.remove();
         await match.remove();
         return {success: true, message: "match has been deleted"};
     } catch (err) {
@@ -144,7 +151,6 @@ const enrollUser = async (userId: string, matchId: string, password?: string) =>
         return {success: true, message: "user has been enrolled", data: new MatchModel(updated).plainMatch};
     } catch (err) {
         if (err instanceof ServiceMessageError) { throw err; }
-        console.log("enrolling: ", err);
         throw new ServiceMessageError(500, "unknown error while enrolling player", err);
     }
 };
@@ -202,8 +208,6 @@ const getMatches = async (filter: MatchFilter) => {
             },
             publicOnly,
         });
-        console.log(matches);
-        console.log(filter.timeFrom.toISOString(), filter.timeTo.toISOString());
 
         return matches.map((m) => new MatchModel(m as MatchModelType).plainMatch);
     } catch (err) {
