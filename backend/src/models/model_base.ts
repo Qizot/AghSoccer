@@ -52,6 +52,19 @@ export class RepositoryBase<T extends mongoose.Document> implements IRead<T> , I
             });
     }
 
+    public updateMany(cond: any, doc: any): Promise<mongoose.Document> {
+        return new Promise((resolve, reject) => {
+            this._model.updateMany(cond, doc, (err, item) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                resolve(item);
+            });
+
+        });
+    }
+
     public findByIdAndUpdate(_id: string, doc: any): Promise<mongoose.Document> {
         return new Promise((resolve, reject) => {
             this._model.findOneAndUpdate({_id: this.toObjectId(_id)}, doc, (err, item) => {

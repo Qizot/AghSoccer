@@ -1,6 +1,6 @@
 import { CreateMatchType, MatchModel, MatchModelType, MatchRepository, PlainMatch } from "../models/match";
 import { ServiceMessage, ServiceMessageError } from "./service_message";
-import { UserModel, UserModelType } from "../models/user";
+import { UserModel, UserModelType, UserRepository } from "../models/user";
 import { ChatRoom } from "../models/chat";
 
 interface EditMatch {
@@ -97,11 +97,18 @@ const deleteMatch = async (owner: MatchOwner, matchId: string) => {
         const match = await getOwnersMatch(owner, matchId);
         const chatRoom = await ChatRoom.findRoom({matchId: match._id});
 
+        const players = match.players;
+
+        await new UserRepository().updateMany({"nickname": {"$in": players}}, {"$pull": {matchesPlayed: matchId}});
+
         // delete chat room
         await chatRoom.remove();
         await match.remove();
+
+
         return {success: true, message: "match has been deleted"};
     } catch (err) {
+        console.log(err);
         if (err instanceof ServiceMessageError) { throw err; }
 
         throw new ServiceMessageError(500, "unknown error while edditing match", err);
@@ -134,7 +141,8 @@ const kickUserOut = async (owner: MatchOwner, matchId: string,  userNickname: st
 const enrollUser = async (userId: string, matchId: string, password?: string) => {
     try {
         const match = await MatchModel.findMatch(matchId) as MatchModelType;
-        const user = await getUserNickname(userId);
+        const user = await UserModel.findUser({id: userId}) as UserModelType;
+        const nickname = await getUserNickname(userId);
         if (!match) {
             throw new ServiceMessageError(404, "match has not been found");
         }
@@ -143,11 +151,17 @@ const enrollUser = async (userId: string, matchId: string, password?: string) =>
             throw new ServiceMessageError(403, "passwords don't match");
         }
 
-        if (match.players.includes(user)) {
+        if (match.players.includes(nickname)) {
             throw new ServiceMessageError(400, "user has been already enrolled");
         }
 
-        await new MatchModel(match).enrollUser(user) as MatchModelType;
+        await new MatchModel(match).enrollUser(nickname) as MatchModelType;
+        if (!user.matchesPlayed) {
+            user.matchesPlayed = [match.id];
+        } else {
+            user.matchesPlayed.push(match.id);
+        }
+        await user.save();
         const updated = await MatchModel.findMatch(matchId) as MatchModelType;
         return {success: true, message: "user has been enrolled", data: new MatchModel(updated).plainMatch};
     } catch (err) {
@@ -159,16 +173,24 @@ const enrollUser = async (userId: string, matchId: string, password?: string) =>
 const derollUser = async (userId: string, matchId: string) => {
     try {
         const match = await MatchModel.findMatch(matchId) as MatchModelType;
-        const user = await getUserNickname(userId);
+        const user = await UserModel.findUser({id: userId}) as UserModelType;
+        const nickname = await getUserNickname(userId);
         if (!match) {
             throw new ServiceMessageError(404, "match has not been found");
         }
 
-        if (!match.players.includes(user)) {
+        if (!match.players.includes(nickname)) {
             throw new ServiceMessageError(400, "user has not been enrolled");
         }
 
-        await new MatchModel(match).derollUser(user) as MatchModelType;
+        await new MatchModel(match).derollUser(nickname) as MatchModelType;
+        
+        const filtered = user.matchesPlayed.filter(id => JSON.stringify(id) !== JSON.stringify(match._id));
+        user.matchesPlayed = filtered;
+        console.log(user.matchesPlayed);
+        await user.save();
+
+
         const updated = await MatchModel.findMatch(matchId) as MatchModelType;
         return {success: true, message: "user has been derolled", data: new MatchModel(updated).plainMatch};
     } catch (err) {
