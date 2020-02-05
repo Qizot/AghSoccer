@@ -14,6 +14,10 @@ class MatchRepository {
     return matchProvider.getMatches(filter: filter);
   }
 
+  Future<List<Match>> getMatchesByIds({@required List<String> ids}) {
+    return matchProvider.getMatchesByIds(ids: ids);
+  }
+
   Future<Match> getMatch({@required String matchId}) {
     return matchProvider.getMatch(matchId: matchId);
   }

@@ -49,6 +49,17 @@ class MatchBloc extends Bloc<MatchEvent, MatchState> {
       }
     }
 
+    if (event is MatchFetchListByIds) {
+      yield MatchLoading();
+      try {
+        final ids = event.ids;
+        final matches = await matchRepository.getMatchesByIds(ids: ids);
+        yield MatchFetchedListByIds(matches: matches);
+      } catch (error) {
+        yield MatchFailure(error: parseError(error.toString()));
+      }
+    }
+
     if (event is MatchCreate) {
       yield MatchCreateLoading();
 

@@ -31,7 +31,19 @@ class MatchFetchedById extends MatchState {
   List<Object> get props => match.props;
 
   @override
-  String toString() => 'MatchFetchedById { error: $match }';
+  String toString() => 'MatchFetchedById { match: $match }';
+}
+
+class MatchFetchedListByIds extends MatchState {
+  final List<Match> matches;
+
+  MatchFetchedListByIds({this.matches});
+
+  @override
+  List<Object> get props => [matches];
+
+  @override
+  String toString() => 'MatchFetchedListByIds { matches }';
 }
 
 class MatchFetchedByFilter extends MatchState {

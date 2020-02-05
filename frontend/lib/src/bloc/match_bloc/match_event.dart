@@ -26,6 +26,19 @@ class MatchFetchById extends MatchEvent {
 
 }
 
+class MatchFetchListByIds extends MatchEvent {
+  final List<String> ids;
+
+  MatchFetchListByIds({this.ids});
+
+  @override
+  List<Object> get props => [ids];
+
+  @override
+  String toString() =>
+      'MatchFetchListByIds { ids: $ids}';
+}
+
 
 class MatchFetchByFilter extends MatchEvent {
   final MatchFilter filter;

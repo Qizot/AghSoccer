@@ -40,14 +40,35 @@ class MatchProvider {
   }
 
   Future<List<Match>> getMatches({@required MatchFilter filter}) async {
-
-    print(filter.toJson());
     final res = await post(ApiConfig.instance.apiUri + "/matches/filter",
       headers: {
         "Content-Type": "application/json"
       },
       body: jsonEncode(filter.toJson())
     );
+
+    switch (res.statusCode) {
+      case 200: {
+        List responseJson = json.decode(res.body);
+        return responseJson.map((m) => new Match.fromJson(m)).toList();
+      }
+      case 400: {
+        throw queryEror(res);
+      }
+      default: {
+        throw serverError(res);
+      }
+    }
+  }
+
+  Future<List<Match>> getMatchesByIds({@required List<String> ids}) async {
+    final res = await post(ApiConfig.instance.apiUri + "/matches/list",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: jsonEncode({
+      "matches": ids
+    }));
 
     switch (res.statusCode) {
       case 200: {
