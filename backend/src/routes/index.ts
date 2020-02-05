@@ -24,6 +24,7 @@ router.delete("/users/:userId", [validateToken, hasRole("admin"), deleteUser]);
 
 // match related;
 router.get("/matches/:matchId", getMatch);
+router.post("/matches/list", listMatchesByIds);
 router.post("/matches/filter", [
     checkDate("timeFrom"),
     checkDate("timeTo"),
@@ -48,6 +49,5 @@ router.post("/matches/:matchId/confirm", [validateToken, confirmMatch]);
 router.post("/matches/:matchId/kick", [validateToken, kickUserOut]);
 router.post("/matches/:matchId/enroll", [validateToken, enrollUser]);
 router.post("/matches/:matchId/deroll", [validateToken, derollUser]);
-router.post("/matches/list", [validateToken, listMatchesByIds]);
 
 export default router;
