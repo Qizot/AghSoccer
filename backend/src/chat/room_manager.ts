@@ -24,8 +24,6 @@ const mongoSaveMessage = async (roomId: string, message: ChatMessage) => {
 
 const mongoFetchChatRoomMessages = async (roomId: string) => {
     const model = await ChatRoom.findRoom({matchId: roomId}) as ChatRoomType;
-    console.log(model);
-    console.log("RoomId: ", roomId);
     if (!model)
         throw new Error("room has not been found");
     return model.messages.map(msg => ({nickname: msg.nickname, message: msg.message, timestamp: msg.createdAt}));

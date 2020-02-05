@@ -34,6 +34,7 @@ interface MatchService {
     derollUser: (userId: string, matchId: string) => Promise<ServiceMessage>;
     getMatch: (matchId: string) => Promise<PlainMatch>;
     getMatches: (filter: MatchFilter) => Promise<PlainMatch[]>;
+    listMatches: (matchIds: string[]) => Promise<PlainMatch[]>;
 }
 
 const getOwnersMatch = async (owner: MatchOwner, matchId: string) => {
@@ -217,6 +218,19 @@ const getMatches = async (filter: MatchFilter) => {
     }
 };
 
+const listMatches = async (matchIds: string[]) => {
+    try {
+        const repo = new MatchRepository();
+        const matches = await repo.find({"_id": {"$in": matchIds}})
+        return matches.map(m => new MatchModel(m as MatchModelType).plainMatch);
+
+    } catch (err) {
+        if (err instanceof ServiceMessageError) { throw err; }
+
+        throw new ServiceMessageError(500, "unknown error while getting matches", err);
+    }
+};
+
 const service: MatchService = {
     createMatch,
     editMatch,
@@ -227,6 +241,7 @@ const service: MatchService = {
     derollUser,
     getMatch,
     getMatches,
+    listMatches
 };
 
 export default service;

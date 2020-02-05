@@ -170,3 +170,18 @@ export const getMatches = (req: Request, res: Response) => {
     }).then((matches) => res.status(HttpStatus.OK).json(matches))
     .catch((err) => handleError(res, err));
 };
+
+export const listMatchesByIds = (req: Request, res: Response) => {
+    const {matches} = req.body;
+
+    if (!Array.isArray(matches) || matches.length === 0) {
+        return res.status(HttpStatus.BAD_REQUEST).json({
+            success: false,
+            message: "invalid array format"
+        });
+    }
+
+    MatchService.listMatches(matches as string[])
+    .then(matches => res.status(HttpStatus.OK).json(matches))
+    .catch(err => handleError(res, err));
+}

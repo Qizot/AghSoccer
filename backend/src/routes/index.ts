@@ -1,5 +1,5 @@
 import express, {Request, Response} from "express";
-import { confirmMatch, createMatch, deleteMatch, derollUser, editMatch, enrollUser, getMatch, getMatches, kickUserOut } from "../controllers/matches";
+import { confirmMatch, createMatch, deleteMatch, derollUser, editMatch, enrollUser, getMatch, getMatches, kickUserOut, listMatchesByIds } from "../controllers/matches";
 import { deleteUser, loginUser, me, refreshToken, registerUser } from "../controllers/user";
 import {hasRole, validateToken} from "../middleware/auth";
 import { checkDate, checkDateIfPresent } from "./validators";
@@ -48,5 +48,6 @@ router.post("/matches/:matchId/confirm", [validateToken, confirmMatch]);
 router.post("/matches/:matchId/kick", [validateToken, kickUserOut]);
 router.post("/matches/:matchId/enroll", [validateToken, enrollUser]);
 router.post("/matches/:matchId/deroll", [validateToken, derollUser]);
+router.post("/matches/list", [validateToken, listMatchesByIds]);
 
 export default router;

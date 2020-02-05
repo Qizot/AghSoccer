@@ -34,9 +34,7 @@ class SocketManager {
             throw new Error("socket manager has not been initialized");
         
         const namespace = socket.nsp;
-        console.log("NAMESPACE ", namespace.name);
         const roomName = socket.nsp.name.split("/").filter(el => el !== "")[0];
-        console.log(roomName);
         socket.on(ChatActions.Send, async (msg: string) => {
             const message = {
                 nickname,
@@ -54,7 +52,6 @@ class SocketManager {
 
         socket.on(ChatActions.GetMessages, async () => {
             try {
-                console.log("ROOM: ", roomName);
                 const messages = await SocketManager.instance.roomManager.fetchChatRoomMessages(roomName);
                 socket.emit(ChatActions.AllMessages, messages);
             } catch (err) {
