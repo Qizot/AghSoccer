@@ -15,7 +15,7 @@ import 'package:intl/intl.dart';
 
 class MatchDetails extends StatefulWidget {
   final String matchId;
-
+  // TODO: hide chat button if user is not a part of the lobby
   Match match;
 
   MatchDetails({@required Match match})
@@ -61,16 +61,15 @@ class _MatchDetailsState extends State<MatchDetails> {
             )
           ],
         ),
-        floatingActionButton: _floatingButton(context),
+        floatingActionButton: Builder(builder: (context) => _floatingButton(context)),
         body: BlocListener<MatchBloc, MatchState>(
           listener: (context, state) {
             if (state is MatchUpdated && state.matchId == widget.matchId) {
-              BlocProvider.of<MatchDetailsBloc>(context).add(MatchDetailsRefresh());
+              BlocProvider.of<MatchDetailsBloc>(context)
+                  .add(MatchDetailsRefresh());
             }
           },
-          child: _detailsListener(
-            child: _detailsBuilder()
-          ),
+          child: _detailsListener(child: _detailsBuilder()),
         ),
       ),
     );
@@ -110,20 +109,20 @@ class _MatchDetailsState extends State<MatchDetails> {
   Widget _detailsBuilder() {
     return BlocBuilder<MatchDetailsBloc, MatchDetailsState>(
         builder: (context, state) {
-          if (state is MatchDetailsRefreshLoading) {
-            return Container(
-              color: Colors.black,
-              child: Center(child: CircularProgressIndicator()),
-            );
-          }
-          return RefreshIndicator(
-              child: _mainLayout(context),
-              onRefresh: () async {
-                BlocProvider.of<MatchDetailsBloc>(context)
-                    .add(MatchDetailsRefresh());
-                return null;
-              });
-        });
+      if (state is MatchDetailsRefreshLoading) {
+        return Container(
+          color: Colors.black,
+          child: Center(child: CircularProgressIndicator()),
+        );
+      }
+      return RefreshIndicator(
+          child: _mainLayout(context),
+          onRefresh: () async {
+            BlocProvider.of<MatchDetailsBloc>(context)
+                .add(MatchDetailsRefresh());
+            return null;
+          });
+    });
   }
 
   Widget _actionButtons(context) {
@@ -140,19 +139,36 @@ class _MatchDetailsState extends State<MatchDetails> {
         });
   }
 
-  Widget _floatingButton(context) {
+  Widget _chatButton(context) {
     return FloatingActionButton(
       onPressed: () {
-        Navigator.push(context, MaterialPageRoute(
-            builder: (BuildContext context) {
-              return ChatPage(matchId: widget.matchId);
-            },
-            fullscreenDialog: true,
-        ));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) {
+                return ChatPage(matchId: widget.matchId, lobbyName: widget.match.name);
+              },
+              fullscreenDialog: true,
+            ));
       },
       child: Icon(Icons.message, color: Colors.white),
       backgroundColor: Colors.blue,
     );
+  }
+
+  Widget _floatingButton(context) {
+    return StreamBuilder(
+        stream: BlocProvider.of<MatchDetailsBloc>(context).isUserEnrolled$,
+        builder: (context, AsyncSnapshot<bool> snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data) {
+              return _chatButton(context);
+            } else {
+              return Container();
+            }
+          }
+          return Container();
+        });
   }
 
   Widget _mainLayout(context) {

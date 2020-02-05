@@ -8,9 +8,10 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChatPage extends StatefulWidget {
+  final String lobbyName;
   final String matchId;
 
-  ChatPage({@required String matchId}) : matchId = matchId;
+  ChatPage({@required String matchId, this.lobbyName}) : matchId = matchId;
 
   State<ChatPage> createState() => _ChatPageState();
 }
@@ -20,8 +21,8 @@ class _ChatPageState extends State<ChatPage> {
   User currentUser;
   List<ChatMessage> messages;
 
-  TextStyle _nicknameStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 16.0);
-  TextStyle _messageStyle = TextStyle(color: Colors.white54, fontSize: 10.0);
+  TextStyle _nicknameStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 18.0);
+  TextStyle _messageStyle = TextStyle(color: Colors.white54, fontSize: 14.0);
 
   @override
   void initState() {
@@ -39,7 +40,7 @@ class _ChatPageState extends State<ChatPage> {
           return ChatBloc()..add(ChatConnect(url: uri, matchId: matchId));
         },
         child: Scaffold(
-            appBar: AppBar(backgroundColor: Colors.black),
+            appBar: AppBar(backgroundColor: Colors.black, title: Text(widget.lobbyName), centerTitle: true),
             body: BlocListener<ChatBloc, ChatState>(
               listener: (context, state) {
                 if (state is ChatConnected) {
@@ -191,6 +192,7 @@ class _ChatPageState extends State<ChatPage> {
                       child:
                           SizedBox(width: 42, height: 42, child: Icon(Icons.near_me)),
                       onTap: () {
+                        if (_inputController.text.trim() == "") return;
                         BlocProvider.of<ChatBloc>(context).add(SendMessage(message: _inputController.text));
                         _inputController.clear();
                       },

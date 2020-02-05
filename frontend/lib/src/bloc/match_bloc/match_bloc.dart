@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:agh_soccer/src/bloc/match_bloc/match_event.dart';
 import 'package:agh_soccer/src/bloc/match_bloc/match_state.dart';
 import 'package:agh_soccer/src/bloc/match_bloc/utils.dart';
-import 'package:agh_soccer/src/models/match_filter.dart';
 import 'package:agh_soccer/src/resources/match_repository.dart';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';

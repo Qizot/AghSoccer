@@ -1,8 +1,6 @@
 
 
-import 'package:agh_soccer/src/models/user_token.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
 abstract class ChatEvent extends Equatable {
   const ChatEvent();

@@ -1,7 +1,3 @@
-
-
-import 'dart:convert';
-
 import 'package:agh_soccer/src/bloc/chat_bloc/chat_event.dart';
 import 'package:agh_soccer/src/bloc/chat_bloc/chat_state.dart';
 import 'package:agh_soccer/src/models/chat_message.dart';
